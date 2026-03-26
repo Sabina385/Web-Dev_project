@@ -55,6 +55,18 @@ cover/
 *.mo
 *.pot
 
+# Django / Python
+venv/
+__pycache__/
+*.pyc
+db.sqlite3
+.env
+*.log
+
+# IDE 
+.vscode/
+.idea/
+
 # Django stuff:
 *.log
 local_settings.py
