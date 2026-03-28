@@ -14,14 +14,11 @@ Users can add movies, write reviews, rate films, and recommend movies to friends
 - Django
 - Django REST Framework (DRF)
 
----
-
 ## Project Structure
-├── backend/ # Django project
+├── backend/ # Django project  
 └── frontend/ # Angular project
 
-
 ## Team Members
-**Selikhanova Sabina**
-**Amanova Aizada**
+**Selikhanova Sabina**  
+**Amanova Aizada**  
 **Suleimanova Dilyara**
