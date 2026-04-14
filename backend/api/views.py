@@ -4,14 +4,16 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 
-from .models import Movie, Review, Rating
+from django.db.models import Avg
+from .models import Movie, Review, Rating,  Actor, CastMovie
 from .serializers import (
     MovieSerializer,
     MovieCreateSerializer,
     ReviewSerializer,
-    RatingSerializer,
     LoginSerializer,
-    RegisterSerializer
+    RegisterSerializer,
+    ActorSerializer, 
+    CastMovieSerializer
 )
 
 
@@ -131,9 +133,38 @@ class RatingAPIView(APIView):
         return Response({'message': 'Rating saved'})
     
 # GET AVG OF RATING
-from django.db.models import Avg
-
 class MovieRatingAPIView(APIView):
     def get(self, request, movie_id):
         avg = Rating.objects.filter(movie_id=movie_id).aggregate(Avg('value'))
         return Response({'average': avg['value__avg']})
+
+
+# ACTORS
+class ActorListAPIView(APIView):
+    def get(self, request):
+        actors = Actor.objects.all()
+        serializer = ActorSerializer(actors, many=True)
+        return Response(serializer.data)
+    
+class CastMovieAPIView(APIView):
+
+    def get(self, request, movie_id):
+        cast = CastMovie.objects.filter(movie_id=movie_id)
+        serializer = CastMovieSerializer(cast, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, movie_id):
+        actor_id = request.data.get('actor_id')
+        role_name = request.data.get('role_name', '')
+
+        if not actor_id:
+            return Response({'error': 'actor_id is required'})
+
+        cast, created = CastMovie.objects.get_or_create(
+            movie_id=movie_id,
+            actor_id=actor_id,
+            defaults={'role_name': role_name}
+        )
+
+        serializer = CastMovieSerializer(cast)
+        return Response(serializer.data)
