@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Movie, Genre, MovieGenre, MovieImage, Review, Rating, Actor, CastMovie
+from .models import Movie, Genre, MovieGenre, MovieImage, Review, Rating, Actor, CastMovie,Watchlist,Recommendation
 
 
 # USER
@@ -20,6 +20,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -129,6 +130,28 @@ class MovieCreateSerializer(serializers.ModelSerializer):
             )
             
         return movie
+    def update(self, instance, validated_data):
+        genres_data = validated_data.pop('genres', [])
+        images_data = validated_data.pop('images', [])
+        cast_data   = validated_data.pop('cast', [])
+
+        for attr, val in validated_data.items():
+            setattr(instance, attr, val)
+        instance.save()
+
+        instance.moviegenre_set.all().delete()
+        instance.movieimage_set.all().delete()
+        instance.castmovie_set.all().delete()
+
+        for g in genres_data:
+            genre, _ = Genre.objects.get_or_create(name=g)
+            MovieGenre.objects.create(movie=instance, genre=genre)
+        for img in images_data:
+            MovieImage.objects.create(movie=instance, image_url=img)
+        for a in cast_data:
+            actor, _ = Actor.objects.get_or_create(name=a['name'])
+            CastMovie.objects.create(movie=instance, actor=actor,role_name=a.get('role', ''))
+        return instance
 
 # REVIEW
 class ReviewSerializer(serializers.ModelSerializer):
@@ -146,3 +169,31 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = ['id', 'value', 'movie', 'user']
+        
+#WATCHLIST
+class WatchlistSerializer(serializers.ModelSerializer):
+    movie = MovieSerializer(read_only=True)
+
+    class Meta:
+        model = Watchlist
+        fields = ['id', 'movie']    
+    
+#input    
+class RecommendationCreateSerializer(serializers.Serializer):
+    to_username=serializers.CharField()
+    movie_title=serializers.CharField()
+    message=serializers.CharField(required=False) 
+     
+#output   
+class RecommendationSerializer(serializers.ModelSerializer):
+    from_user = UserSerializer(read_only=True)
+    movie = MovieSerializer(read_only=True)
+
+    class Meta:
+        model = Recommendation
+        fields = ['id', 'from_user', 'movie', 'message']    
+    
+class CastMovieCreateSerializer(serializers.Serializer):
+    actor_id = serializers.IntegerField()
+    role_name = serializers.CharField(required=False, allow_blank=True)    
+                     

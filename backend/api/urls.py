@@ -8,8 +8,8 @@ urlpatterns = [
 
     # movies
     path('movies/', MovieListAPIView.as_view()),
-    path('movies/<int:pk>/', MovieDetailAPIView.as_view()),
     path('movies/create/', MovieCreateAPIView.as_view()),
+    path('movies/<int:pk>/', MovieDetailAPIView.as_view()),
     path('movies/<int:pk>/update/', MovieUpdateAPIView.as_view()),
     path('movies/<int:pk>/delete/', MovieDeleteAPIView.as_view()),
 
@@ -24,4 +24,11 @@ urlpatterns = [
     # ratings
     path('ratings/', RatingAPIView.as_view()),
     path('ratings/<int:movie_id>/', MovieRatingAPIView.as_view()),
+    
+    #watchlist
+    path('watchlist/',WatchlistAPIView.as_view()),
+    
+    #recommendations
+    path('recommendations/send/',RecommendationAPIView.as_view()),
+    path('recommendations/',RecommendationListAPIView.as_view()),
 ]

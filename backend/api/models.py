@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Genre
 # Model for listing genres
 class Genre(models.Model):
@@ -71,6 +71,35 @@ class Review(models.Model):
 # Rating
 # Model of grade that user give to specific movie
 class Rating(models.Model):
-    value = models.IntegerField()
+    value = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    class Meta:
+        unique_together = ('movie', 'user')
+    
+#Watchlist
+#Movies saved by user
+class Watchlist(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)    
+    added_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('user', 'movie')
+    def __str__(self):
+        return f"{self.user.username} - {self.movie.title}"    
+    
+ 
+#Recommendation
+#User recommends movie to another user
+
+class Recommendation(models.Model):
+    from_user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='sent_recommendations')
+    to_user=models.ForeignKey(User,on_delete=models.CASCADE, related_name='received_recommendations')    
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    message = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True) 
+    
+    def __str__(self):
+        return f"{self.from_user.username} -> {self.to_user.username} ({self.movie.title})"

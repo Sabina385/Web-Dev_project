@@ -30,11 +30,29 @@ class MovieAdmin(admin.ModelAdmin):
 class ActorAdmin(admin.ModelAdmin):
     list_display = ('name', 'birth_date')
     search_fields = ('name',)
+    
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('id', 'movie', 'user')
+    search_fields = ('movie__title', 'user__username') 
+    
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'movie', 'user', 'value')
+    search_fields = ('movie__title', 'user__username')
+    
+@admin.register(Watchlist)
+class WatchlistAdmin(admin.ModelAdmin):
+    list_display = ('id', 'movie', 'user')
+
+
+@admin.register(Recommendation)
+class RecommendationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'from_user', 'to_user', 'movie')    
+       
 
 admin.site.register(Movie, MovieAdmin)
 # admin.site.register(Movie)
 admin.site.register(Genre)
 admin.site.register(MovieGenre)
 admin.site.register(MovieImage)
-admin.site.register(Review)
-admin.site.register(Rating)
