@@ -6,7 +6,6 @@
   flex-direction: column;
 }
 
-/* --- Header --- */
 .header-content {
   display: flex;
   justify-content: space-between;
@@ -53,7 +52,6 @@ nav a:hover { color: white; }
   border-radius: 8px;
 }
 
-/* --- Main Grid --- */
 .main-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
@@ -73,8 +71,8 @@ nav a:hover { color: white; }
   padding: 6px 12px;
   border-radius: 20px;
   width: fit-content;
-  font-size: 13px;
-  margin-bottom: 24px;
+  font-size: 16px;
+  margin-bottom: -20px;
 }
 
 h1 {
@@ -90,10 +88,10 @@ h1 {
   color: #a0a0a8;
   font-size: 18px;
   max-width: 480px;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
-.hero-actions { display: flex; gap: 16px; margin-bottom: 60px; }
+.hero-actions { display: flex; gap: 16px; margin-bottom: 20px; }
 
 .hero-btn {
   padding: 14px 28px;
@@ -115,7 +113,6 @@ h1 {
   color: white;
 }
 
-/* --- Neon Cards --- */
 .right-col {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -148,7 +145,6 @@ h1 {
 .card-icon { font-size: 32px; margin-bottom: 10px; }
 .card-title { font-size: 14px; color: #808088; }
 
-/* Colors from your screenshot */
 .neon-card.purple { border-color: #5a2e91; box-shadow: 0 0 15px rgba(90, 46, 145, 0.2); }
 .neon-card.orange { border-color: #914d2e; box-shadow: 0 0 15px rgba(145, 77, 46, 0.2); }
 .neon-card.yellow { border-color: #91842e; box-shadow: 0 0 15px rgba(145, 132, 46, 0.2); }
@@ -156,7 +152,7 @@ h1 {
 .neon-card.red { border-color: #912e2e; box-shadow: 0 0 15px rgba(145, 46, 46, 0.2); }
 .neon-card.green { border-color: #2e915a; box-shadow: 0 0 15px rgba(46, 145, 90, 0.2); }
 
-/* --- Footer --- */
+
 .footer-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -169,3 +165,23 @@ h1 {
 .footer-icon { font-size: 24px; opacity: 0.5; }
 .footer-text h3 { font-size: 16px; margin: 0 0 5px; }
 .footer-text p { font-size: 13px; color: #a0a0a8; margin: 0; }
+
+.stats{
+    display:flex;
+    gap:100px;
+    margin-top: 5px;
+    padding-top: 20px;
+
+}
+.stats-item h2{
+    font-size:80px;
+    font-weight: 1000;
+    margin: 3;
+    color:#ffffff;
+}
+.stats-item p{
+    font-size: 14px;
+    color: #888;
+    margin: 4px 0 0;
+    text-transform: lowercase;
+}

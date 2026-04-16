@@ -9,6 +9,9 @@ export interface Movie {
   description: string;
   release_year: number;
   duration: number;
+  avg_rating?: number; 
+  images: { image_url: string }[];
+  genres: { genre: { name: string } }[];
 }
 
 export interface MovieGenre {

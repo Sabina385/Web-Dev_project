@@ -1,0 +1,47 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="logo-wrapper">
+      <div class="logo-box"></div>
+      <span class="logo-text">Movie Club</span>
+    </div>
+
+    <h2>Create Account</h2>
+    <p class="subtitle">Join the club to start your journey</p>
+
+    <form (ngSubmit)="onRegister()" #regForm="ngForm">
+      <div class="input-group">
+        <label>Username</label>
+        <input type="text" name="username" [(ngModel)]="regData.username" required>
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" name="email" [(ngModel)]="regData.email" required>
+      </div>
+
+     <div class="input-group">
+       <label>Password</label>
+       <div class="password-wrapper">
+        <input 
+          [type]="isPasswordVisible ? 'text' : 'password'" 
+          name="password" 
+          [(ngModel)]="regData.password" 
+          required
+          placeholder="Create a strong password"
+        >
+        <button type="button" class="eye-btn" (click)="togglePasswordVisibility()">
+          {{ isPasswordVisible ? '👁' : '👁' }}
+        </button>
+  </div>
+</div>
+
+      <button type="submit" class="login-btn" [disabled]="!regForm.form.valid">
+        Sign Up
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p>Already have an account? <a routerLink="/login">Log In</a></p>
+    </div>
+  </div>
+</div>

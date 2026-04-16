@@ -7,6 +7,25 @@
   color: white;
   font-family: 'Inter', sans-serif;
 }
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center; 
+  margin-bottom: 30px;
+}
+.logo-box {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #ff5f2e, #e63946); /* Тот самый красный квадратик */
+  border-radius: 8px;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 20px;
+  color: white; /* Цвет текста логотипа */
+}
 
 .login-card {
   background: rgba(255, 255, 255, 0.02);
@@ -16,26 +35,6 @@
   width: 100%;
   max-width: 400px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-}
-
-.logo-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
-.logo-box {
-  width: 30px;
-  height: 30px;
-  background: linear-gradient(135deg, #ff5f2e, #e63946);
-  border-radius: 8px;
-}
-
-.logo-text {
-  font-weight: 700;
-  font-size: 20px;
 }
 
 h2 {
@@ -53,13 +52,15 @@ h2 {
 
 .input-group {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .input-group label {
-  display: block;
   font-size: 13px;
   color: #808088;
   margin-bottom: 8px;
+  text-align: left;
 }
 
 input {
@@ -70,13 +71,11 @@ input {
   border-radius: 12px;
   color: white;
   box-sizing: border-box;
-  transition: 0.3s;
+  outline: none;
 }
 
 input:focus {
-  outline: none;
-  border-color: #ff5f2e;
-  background: rgba(255, 95, 46, 0.05);
+  border-color: #ff5f2e; /* Тот самый оранжевый из логотипа */
 }
 
 .login-btn {
@@ -87,21 +86,13 @@ input:focus {
   border: none;
   border-radius: 12px;
   font-weight: 600;
-  font-size: 16px;
   cursor: pointer;
   margin-top: 10px;
-  transition: 0.3s;
-}
-
-.login-btn:hover:not(:disabled) {
-  background: #e64a19;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(255, 95, 46, 0.2);
 }
 
 .login-btn:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
+  background: #444;
 }
 
 .login-footer {
@@ -115,7 +106,6 @@ input:focus {
   color: #ff5f2e;
   text-decoration: none;
 }
-
 .password-wrapper {
   position: relative;
   display: flex;
@@ -126,7 +116,6 @@ input:focus {
 .password-wrapper input {
   padding-right: 45px;
 }
-
 
 .eye-btn {
   position: absolute;

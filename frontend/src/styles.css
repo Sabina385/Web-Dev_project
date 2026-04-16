@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-/* Подключаем шрифт Google Fonts (интер) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 body, html {
@@ -7,7 +6,7 @@ body, html {
   padding: 0;
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
-  background-color: #0b0b14; /* Тот самый темно-синий фон */
+  background-color: #0b0b14;
   color: white;
   -webkit-font-smoothing: antialiased;
 }
