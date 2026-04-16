@@ -1,3 +1,4 @@
+from django.contrib.auth import models
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Movie, Genre, MovieGenre, MovieImage, Review, Rating, Actor, CastMovie,Watchlist,Recommendation
@@ -69,7 +70,8 @@ class MovieGenreSerializer(serializers.ModelSerializer):
 class MovieSerializer(serializers.ModelSerializer):
     images = MovieImageSerializer(source='movieimage_set', many=True, read_only=True)
     genres = MovieGenreSerializer(source='moviegenre_set', many=True, read_only=True)
-    cast = CastMovieSerializer(source='castmovie_set', many=True, read_only=True)
+    rating_avg = serializers.SerializerMethodField()
+    #cast = CastMovieSerializer(source='castmovie_set', many=True, read_only=True)
 
     class Meta:
         model = Movie
@@ -81,8 +83,14 @@ class MovieSerializer(serializers.ModelSerializer):
             'duration',
             'images',
             'genres',
-            'cast'
+            'rating_avg'
+            #'cast'
         ]
+    def get_rating_avg(self, obj):
+        from .models import Rating
+        # Считаем среднее по всем оценкам этого фильма
+        avg = Rating.objects.filter(movie=obj).aggregate(models.Avg('value'))['value__avg']
+        return round(avg, 1) if avg else 0.0    
 
 
 # MOVIE (CREATE)
