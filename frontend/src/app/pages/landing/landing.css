@@ -1,0 +1,171 @@
+.landing-page {
+  background-color: #05050a;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Header --- */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 5%;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.logo-box {
+  background: linear-gradient(135deg, #ff5f2e, #e63946);
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+}
+
+nav a {
+  color: #a0a0a8;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+nav a:hover { color: white; }
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.nav-btn.primary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+/* --- Main Grid --- */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  padding: 80px 5%;
+  flex: 1;
+}
+
+.left-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.badge {
+  background: rgba(255, 95, 46, 0.1);
+  color: #ff5f2e;
+  padding: 6px 12px;
+  border-radius: 20px;
+  width: fit-content;
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  font-weight: 800;
+}
+
+.highlight { color: #ff5f2e; }
+
+.description {
+  color: #a0a0a8;
+  font-size: 18px;
+  max-width: 480px;
+  margin-bottom: 40px;
+}
+
+.hero-actions { display: flex; gap: 16px; margin-bottom: 60px; }
+
+.hero-btn {
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.hero-btn.primary {
+  background: #ff5f2e;
+  border: none;
+  color: white;
+}
+
+.hero-btn.secondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* --- Neon Cards --- */
+.right-col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-content: center;
+}
+
+.neon-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  aspect-ratio: 3/4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: 0.3s;
+}
+
+.card-rating {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #ffcc00;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.card-icon { font-size: 32px; margin-bottom: 10px; }
+.card-title { font-size: 14px; color: #808088; }
+
+/* Colors from your screenshot */
+.neon-card.purple { border-color: #5a2e91; box-shadow: 0 0 15px rgba(90, 46, 145, 0.2); }
+.neon-card.orange { border-color: #914d2e; box-shadow: 0 0 15px rgba(145, 77, 46, 0.2); }
+.neon-card.yellow { border-color: #91842e; box-shadow: 0 0 15px rgba(145, 132, 46, 0.2); }
+.neon-card.pink { border-color: #912e6c; box-shadow: 0 0 15px rgba(145, 46, 108, 0.2); }
+.neon-card.red { border-color: #912e2e; box-shadow: 0 0 15px rgba(145, 46, 46, 0.2); }
+.neon-card.green { border-color: #2e915a; box-shadow: 0 0 15px rgba(46, 145, 90, 0.2); }
+
+/* --- Footer --- */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 40px 5%;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-item { display: flex; gap: 15px; align-items: flex-start; }
+.footer-icon { font-size: 24px; opacity: 0.5; }
+.footer-text h3 { font-size: 16px; margin: 0 0 5px; }
+.footer-text p { font-size: 13px; color: #a0a0a8; margin: 0; }

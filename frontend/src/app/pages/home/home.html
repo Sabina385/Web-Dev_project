@@ -1,0 +1,14 @@
+<div class="dashboard">
+  <div class="movie-grid">
+    <div *ngFor="let movie of api.movies()" class="movie-card">
+      <div class="rating-badge">{{ movie.avg_rating || 'N/A' }}</div>
+      
+      <img [src]="movie.images[0]?.image_url" alt="poster">
+      
+      <div class="info">
+        <h3>{{ movie.title }}</h3>
+        <span>{{ movie.release_year }} • {{ movie.duration }} min</span>
+      </div>
+    </div>
+  </div>
+</div>
