@@ -1,0 +1,34 @@
+<h2>👤 Profile</h2>
+
+<p><strong>Username:</strong> {{ profile?.username }}</p>
+
+<h3>🎬 Watchlist</h3>
+@for (movie of profile?.watchlist; track movie) {
+  <div>
+    Movie ID: {{ movie }}
+  </div>
+}
+
+
+<h3>📝 Reviews</h3>
+@for (review of profile?.reviews; track review) {
+  <div>
+    {{ review.text }}
+  </div>
+}
+
+
+<h3>⭐ Ratings</h3>
+@for (rating of profile?.ratings; track rating) {
+  <div>
+    Movie: {{ rating.movie }} | Rating: {{ rating.value }}
+  </div>
+}
+
+
+<h3>📤 Recommendations</h3>
+@for (recommendation of profile?.recommendations; track recommendation) {
+    <div>
+      {{ recommendation.movie }} → {{ recommendation.to_user }}
+    </div>
+}

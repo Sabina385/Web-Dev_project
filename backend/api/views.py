@@ -18,6 +18,7 @@ from .serializers import (
     RegisterSerializer,
     ActorSerializer, 
     CastMovieSerializer,
+    RatingSerializer,
     WatchlistSerializer,
     RecommendationSerializer,
     CastMovieCreateSerializer,
@@ -269,4 +270,29 @@ class RecommendationListAPIView(APIView):
         serializer = RecommendationSerializer(recs, many=True)
         return Response(serializer.data)
       
-    
+
+
+class UserProfileAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        reviews = Review.objects.filter(user=user)
+        ratings = Rating.objects.filter(user=user)
+        watchlist = Watchlist.objects.filter(user=user)
+        recommendations = Recommendation.objects.filter(from_user=user)
+
+        return Response({
+            'username': user.username,
+            'reviews': ReviewSerializer(reviews, many=True).data,
+            'ratings': RatingSerializer(ratings, many=True).data,
+            'watchlist': [w.movie.id for w in watchlist],
+            'recommendations': [
+                {
+                    'movie': r.movie.title,
+                    'to_user': r.to_user.username
+                }
+                for r in recommendations
+            ]
+        })

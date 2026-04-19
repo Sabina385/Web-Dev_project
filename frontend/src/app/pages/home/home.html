@@ -1,14 +1,163 @@
-<div class="dashboard">
-  <div class="movie-grid">
-    <div *ngFor="let movie of api.movies()" class="movie-card">
-      <div class="rating-badge">{{ movie.avg_rating || 'N/A' }}</div>
-      
-      <img [src]="movie.images[0]?.image_url" alt="poster">
-      
-      <div class="info">
-        <h3>{{ movie.title }}</h3>
-        <span>{{ movie.release_year }} • {{ movie.duration }} min</span>
-      </div>
+<!-- Header / Navbar -->
+<header class="header">
+  <div class="header-content">
+    <div class="logo">
+      <i class="play-icon"></i>
+      <span>Movie Club</span>
+    </div>
+    <nav class="nav-menu">
+      <a routerLink="/home" class="nav-link active">Home</a>
+      <a routerLink="/home" class="nav-link">Movies</a>
+      <a routerLink="/home" class="nav-link">Recommendations</a>
+      <a routerLink="/profile" class="nav-link">Profile</a>
+      <button (click)="logout()" class="nav-link logout-btn">Logout</button>
+    </nav>
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Search movies..."
+        [(ngModel)]="searchQuery"
+        (input)="onSearchChange()"
+        class="search-input">
+      <button class="search-btn">🔍</button>
     </div>
   </div>
-</div>
+</header>
+
+<!-- Description Section -->
+<section class="descript">
+  <div class="descript-content">
+    <h1 class="descript-title">Discover, Rate, and Share Movies</h1>
+    <p class="descript-text">
+      Our community of movie lovers. Discover new films, rate your favorites,
+      write reviews, and get personalized recommendations based on your taste.
+    </p>
+  </div>
+  <div class="descript-image">
+    <img src="https://www.cm-meda.pt/wp-content/uploads/2016/06/cinema-portugues-movimento.jpg" alt="Movie Club">
+  </div>
+</section>
+
+<!-- Popular / Trending Movies -->
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">🔥 Popular Movies</h2>
+    <button class="btn btn-outline">See All</button>
+  </div>
+  <div class="movie-grid">
+    @for (movie of popularMovies(); track movie.id) {
+      <div class="movie-card">
+        <div class="rating-badge">{{ movie.rating_avg || 'N/A' }}</div>
+        <img [src]="movie.images[0]?.image_url" alt="poster" (error)="onImageError($event)">
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <p>{{ movie.release_year }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Personalized Recommendations -->
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">⭐ Recommended for You</h2>
+  </div>
+  <div class="movie-grid">
+   @for (movie of recommendedMovies(); track movie.id) {
+      <div class="movie-card">
+        <div class="rating-badge">{{ movie.rating_avg || 'N/A' }}</div>
+        <img [src]="movie.images[0]?.image_url" alt="poster" (error)="onImageError($event)">
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <p>{{ movie.release_year }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Latest Reviews -->
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">📝 Latest Reviews</h2>
+  </div>
+  <div class="reviews-grid">
+    @for (review of latestReviews(); track review.id) {
+      <div class="review-card">
+        <div class="review-header">
+          <span class="review-user">{{ review.user }}</span>
+          <span class="review-rating">⭐ {{ getMovieRating(review.movie) }}</span>
+        </div>
+        <h4 class="review-movie">{{ getMovieTitle(review.movie) }}</h4>
+        <p class="review-text">{{ review.text }}</p>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Genres / Categories -->
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">🎯 Browse by Genre</h2>
+  </div>
+  <div class="genres-grid">
+    @for (genre of availableGenres(); track genre) {
+      <button
+        (click)="filterByGenre(genre)"
+        class="genre-btn"
+        [class.active]="selectedGenre() === genre">
+        {{ genre }}
+      </button>
+    }
+  </div>
+</section>
+
+
+<!-- Your Watchlist Preview -->
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">❤️ Your Watchlist</h2>
+    <button routerLink="/profile" class="btn btn-outline">View All</button>
+  </div>
+  <div class="watchlist-preview">
+    @for (movie of watchlistMovies(); track movie.id) {
+      <div class="watchlist-item">
+        <img [src]="movie.images[0]?.image_url" alt="poster" (error)="onImageError($event)">
+        <div class="watchlist-info">
+          <h4>{{ movie.title }}</h4>
+          <p>{{ movie.release_year }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Movie Club</h3>
+      <p>Your personal cinema companion</p>
+    </div>
+    <div class="footer-section">
+      <h4>About</h4>
+      <p>Discover, rate, and share your favorite movies with our community.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: info@movieclub.com</p>
+      <p>Phone: +1 (555) 123-4567</p>
+    </div>
+    <div class="footer-section">
+      <h4>Links</h4>
+      <a href="#" class="footer-link">GitHub</a>
+      <a href="#" class="footer-link">Terms of Service</a>
+      <a href="#" class="footer-link">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Movie Club. All rights reserved.</p>
+  </div>
+</footer>

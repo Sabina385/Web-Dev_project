@@ -19,9 +19,12 @@ export class ApiService {
     });
   }
 
+  getProfile() {
+    return this.http.get(this.baseUrl + 'profile/');
+  }
 
   login(credentials: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}token/`, credentials);
+    return this.http.post(`${this.baseUrl}login/`, credentials);
   }
   register(userData: any): Observable<any> {
     return this.http.post(`${this.baseUrl}register/`, userData);

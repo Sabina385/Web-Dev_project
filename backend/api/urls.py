@@ -6,6 +6,9 @@ urlpatterns = [
     path('login/', LoginAPIView.as_view()),
     path('register/', RegisterAPIView.as_view()),
 
+    # profile
+    path('profile/', UserProfileAPIView.as_view()),
+
     # movies
     path('movies/', MovieListAPIView.as_view()),
     path('movies/create/', MovieCreateAPIView.as_view()),

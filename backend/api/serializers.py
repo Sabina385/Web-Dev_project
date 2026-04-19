@@ -1,4 +1,4 @@
-from django.contrib.auth import models
+from django.db import models
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Movie, Genre, MovieGenre, MovieImage, Review, Rating, Actor, CastMovie,Watchlist,Recommendation
@@ -20,7 +20,7 @@ class LoginSerializer(serializers.Serializer):
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ['username', 'email', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
