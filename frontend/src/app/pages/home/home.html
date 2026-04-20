@@ -7,19 +7,21 @@
     </div>
     <nav class="nav-menu">
       <a routerLink="/home" class="nav-link active">Home</a>
-      <a routerLink="/home" class="nav-link">Movies</a>
+      <a routerLink="/home" class="nav-link">Catalog</a>
       <a routerLink="/home" class="nav-link">Recommendations</a>
       <a routerLink="/profile" class="nav-link">Profile</a>
-      <button (click)="logout()" class="nav-link logout-btn">Logout</button>
     </nav>
-    <div class="search-bar">
-      <input
+    <div class="input-logout-btn">
+      <div class="search-bar">
+        <input
         type="text"
         placeholder="Search movies..."
         [(ngModel)]="searchQuery"
         (input)="onSearchChange()"
         class="search-input">
-      <button class="search-btn">🔍</button>
+        <button class="search-btn">🔍</button>
+      </div>
+      <button (click)="logout()" class="logout-btn">Log out</button>
     </div>
   </div>
 </header>
@@ -41,8 +43,8 @@
 <!-- Popular / Trending Movies -->
 <section class="section">
   <div class="section-header">
-    <h2 class="section-title">🔥 Popular Movies</h2>
-    <button class="btn btn-outline">See All</button>
+    <h2 class="section-title">Popular Movies</h2>
+    <button class="btn btn-outline" title="Catalog of popular">See All</button>
   </div>
   <div class="movie-grid">
     @for (movie of popularMovies(); track movie.id) {
@@ -61,7 +63,7 @@
 <!-- Personalized Recommendations -->
 <section class="section">
   <div class="section-header">
-    <h2 class="section-title">⭐ Recommended for You</h2>
+    <h2 class="section-title">Recommended for You</h2>
   </div>
   <div class="movie-grid">
    @for (movie of recommendedMovies(); track movie.id) {
@@ -80,14 +82,14 @@
 <!-- Latest Reviews -->
 <section class="section">
   <div class="section-header">
-    <h2 class="section-title">📝 Latest Reviews</h2>
+    <h2 class="section-title">Latest Reviews</h2>
   </div>
   <div class="reviews-grid">
     @for (review of latestReviews(); track review.id) {
       <div class="review-card">
         <div class="review-header">
           <span class="review-user">{{ review.user }}</span>
-          <span class="review-rating">⭐ {{ getMovieRating(review.movie) }}</span>
+          <span class="review-rating">{{ getMovieRating(review.movie) }}</span>
         </div>
         <h4 class="review-movie">{{ getMovieTitle(review.movie) }}</h4>
         <p class="review-text">{{ review.text }}</p>
@@ -99,7 +101,7 @@
 <!-- Genres / Categories -->
 <section class="section">
   <div class="section-header">
-    <h2 class="section-title">🎯 Browse by Genre</h2>
+    <h2 class="section-title">Browse by Genre</h2>
   </div>
   <div class="genres-grid">
     @for (genre of availableGenres(); track genre) {
@@ -117,8 +119,8 @@
 <!-- Your Watchlist Preview -->
 <section class="section">
   <div class="section-header">
-    <h2 class="section-title">❤️ Your Watchlist</h2>
-    <button routerLink="/profile" class="btn btn-outline">View All</button>
+    <h2 class="section-title">Your Watchlist</h2>
+    <button routerLink="/profile" class="btn btn-outline" title="View watchlist in profile">View All</button>
   </div>
   <div class="watchlist-preview">
     @for (movie of watchlistMovies(); track movie.id) {
@@ -147,8 +149,8 @@
     </div>
     <div class="footer-section">
       <h4>Contact</h4>
-      <p>Email: info@movieclub.com</p>
-      <p>Phone: +1 (555) 123-4567</p>
+      <p>Email: movieclub@gmail.com</p>
+      <p>Phone: +7-777-777-7777</p>
     </div>
     <div class="footer-section">
       <h4>Links</h4>

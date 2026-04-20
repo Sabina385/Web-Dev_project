@@ -3,6 +3,11 @@ export interface Genre {
   name: string;
 }
 
+export interface User {
+  id: number;
+  name: string;
+}
+
 export interface Movie {
   id: number;
   title: string;

@@ -23,9 +23,9 @@ export class HomeComponent implements OnInit {
   searchQuery = signal('');
   selectedGenre = signal('');
   availableGenres = signal<string[]>([]);
-  reviews = signal<Review[]>([]);
-  recommendations = signal<Recommendation[]>([]);
-  watchlist = signal<Movie[]>([]);
+  reviews = this.api.reviews;
+  recommendations = this.api.recommendations;
+  watchlist = this.api.watchlist;
 
   filteredMovies = computed(() => {
     let movies = this.api.movies();
@@ -75,8 +75,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.api.getMovies();
-    this.loadRecommendations();
-    this.loadWatchlist();
+    this.api.getUserReviews();
+    this.api.getUserRecommendations();
+    this.api.getUserWatchlist();
   }
 
   isLoggedIn(): boolean {
@@ -84,7 +85,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSearchChange() {
-    // Search is reactive via computed signal
+    
   }
 
   filterByGenre(genre: string) {
@@ -97,18 +98,6 @@ export class HomeComponent implements OnInit {
       movie.genres.forEach(g => genres.add(g.genre.name));
     });
     this.availableGenres.set(Array.from(genres).sort());
-  }
-
-  
-
-  private loadRecommendations() {
-    // Mock recommendations
-    this.recommendations.set([]);
-  }
-
-  private loadWatchlist() {
-    // Mock watchlist - in real app, fetch user's watchlist
-    this.watchlist.set(this.api.movies().slice(0, 2));
   }
 
   getMovieRating(movieId: number): number {
@@ -127,6 +116,7 @@ export class HomeComponent implements OnInit {
   }
 
   logout() {
+
     localStorage.removeItem('token');
     this.router.navigate(['/']);
   }
