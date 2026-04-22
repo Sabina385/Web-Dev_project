@@ -5,7 +5,8 @@ export interface Genre {
 
 export interface User {
   id: number;
-  name: string;
+  name?: string;
+  username?: string;
 }
 
 export interface Movie {
@@ -49,14 +50,14 @@ export interface Review {
   id: number;
   text: string;
   movie: number;
-  user: number;
+  user: User;
 }
 
 export interface Rating {
   id: number;
   value: number;
   movie: number;
-  user: number;
+  user: User | number;
 }
 
 export interface Watchlist {

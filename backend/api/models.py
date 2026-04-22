@@ -71,7 +71,7 @@ class Review(models.Model):
 # Rating
 # Model of grade that user give to specific movie
 class Rating(models.Model):
-    value = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    value = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(10)])
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     

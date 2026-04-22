@@ -6,8 +6,6 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from rest_framework.pagination import PageNumberPagination
-
 from django.db.models import Avg
 from .models import Movie, Review, Rating,  Actor, CastMovie, Recommendation, Watchlist
 from .serializers import (
@@ -65,13 +63,9 @@ class MovieListAPIView(APIView):
 
         if genre:
             movies = movies.filter(moviegenre__genre__name__icontains=genre)
-            
-        paginator = PageNumberPagination()
-        paginator.page_size = 5 
-        
-        result_page = paginator.paginate_queryset(movies, request)   
-        serializer = MovieSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
+
+        serializer = MovieSerializer(movies, many=True)
+        return Response({'results': serializer.data})
     
 # GET ONE MOVIE
 class MovieDetailAPIView(APIView):
@@ -219,6 +213,7 @@ class WatchlistAPIView(APIView):
         return Response(serializer.data)
     def post(self,request):
         movie_id=request.data.get('movie')
+        movie = get_object_or_404(Movie, id=movie_id)
         
         obj, created=Watchlist.objects.get_or_create(
             user=request.user,
@@ -226,9 +221,15 @@ class WatchlistAPIView(APIView):
         )   
         
         if not created:
-            return Response({'message':'Already in watchlist'},status=status.HTTP_200_OK)    
+            return Response({
+                'message':'Already in watchlist',
+                'movie': MovieSerializer(movie).data
+            },status=status.HTTP_200_OK)    
         
-        return Response({'message':'Added to watchlist'},status=status.HTTP_201_CREATED)
+        return Response({
+            'message':'Added to watchlist',
+            'movie': MovieSerializer(movie).data
+        },status=status.HTTP_201_CREATED)
     def delete(self,request):
         movie_id = request.data.get('movie')
         Watchlist.objects.filter(user=request.user, movie_id=movie_id).delete()

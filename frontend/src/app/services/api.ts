@@ -1,7 +1,30 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Movie, Review, Recommendation, Watchlist } from '../models/movie.model';
+import { Movie, Review, Recommendation, Watchlist, Rating } from '../models/movie.model';
 import { Observable } from 'rxjs';
+
+export interface WatchlistResponse {
+  message: string;
+  movie: Movie;
+}
+
+export interface RemoveWatchlistResponse {
+  message: string;
+}
+
+export interface ProfileResponse {
+  username: string;
+  reviews: Review[];
+  ratings: Rating[];
+  watchlist: number[];
+  recommendations: { movie: string; to_user: string }[];
+}
+
+export interface RatingResponse {
+  message: string;
+}
+
+export interface ReviewResponse extends Review {}
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -10,6 +33,7 @@ export class ApiService {
 
   movies = signal<Movie[]>([]);
   reviews = signal<Review[]>([]);
+  ratings = signal<Rating[]>([]);
   recommendations = signal<Recommendation[]>([]);
   watchlist = signal<Movie[]>([]);
   currentUserToken = signal<string | null>(localStorage.getItem('token'));
@@ -23,8 +47,11 @@ export class ApiService {
   }
 
   getUserReviews() {
-    this.http.get<{reviews: Review[]}>(`${this.baseUrl}profile/`).subscribe({
-      next: (res) => this.reviews.set(res.reviews),
+    this.http.get<ProfileResponse>(`${this.baseUrl}profile/`).subscribe({
+      next: (res) => {
+        this.reviews.set(res.reviews);
+        this.ratings.set(res.ratings);
+      },
       error: (err) => console.error('Ошибка при загрузке отзывов:', err)
     });
   }
@@ -36,10 +63,38 @@ export class ApiService {
     });
   }
 
+  getMovieReviews(movieId: number): Observable<Review[]> {
+    return this.http.get<Review[]>(`${this.baseUrl}reviews/${movieId}/`);
+  }
+
   getUserWatchlist() {
     this.http.get<Movie[]>(`${this.baseUrl}watchlist/`).subscribe({
       next: (res) => this.watchlist.set(res),
       error: (err) => console.error('Ошибка при загрузке списка просмотра:', err)
+    });
+  }
+
+  addToWatchlist(movieId: number): Observable<WatchlistResponse> {
+    return this.http.post<WatchlistResponse>(`${this.baseUrl}watchlist/`, { movie: movieId });
+  }
+
+  removeFromWatchlist(movieId: number): Observable<RemoveWatchlistResponse> {
+    return this.http.delete<RemoveWatchlistResponse>(`${this.baseUrl}watchlist/`, {
+      body: { movie: movieId }
+    });
+  }
+
+  saveRating(movieId: number, value: number): Observable<RatingResponse> {
+    return this.http.post<RatingResponse>(`${this.baseUrl}ratings/`, {
+      movie: movieId,
+      value
+    });
+  }
+
+  createReview(movieId: number, text: string): Observable<ReviewResponse> {
+    return this.http.post<ReviewResponse>(`${this.baseUrl}reviews/create/`, {
+      movie: movieId,
+      text
     });
   }
 

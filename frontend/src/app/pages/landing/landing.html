@@ -8,10 +8,10 @@
         <span class="logo-text">Movie Club</span>
       </div>
       <nav>
-        <a href="#">Catalog</a>
-        <a href="#">Genres</a>
-        <a href="#">Top Movies</a>
-        <a href="#">About Us</a>
+        <a routerLink="/register">Catalog</a>
+        <a href="#" (click)="scrollToGenres($event)">Genres</a>
+        <a routerLink="/register">Top Movies</a>
+        <a href="#" (click)="scrollToAbout($event)">About Us</a>
       </nav>
       <div class="auth-buttons">
         <button class="nav-btn" routerLink="/login">Log In</button>
@@ -30,6 +30,7 @@
       <p class="description">Discover new movies, save to your watchlist, rate your favorites, and share recommendations with friends.</p>
       
       <div class="hero-actions">
+
         <button class="hero-btn primary" routerLink="/register">Start for free</button>
       </div>
       
@@ -80,7 +81,26 @@
     </div>
   </main>
 
-  <footer class="footer-grid">
+  <section class="genres-section" #genresSection>
+    <div class="genres-showcase">
+      <div class="genres-copy">
+        <h2>Find your next mood</h2>
+        <p class="section-text">Action nights, quiet dramas, sci-fi marathons or romance comfort picks. Create an account to open the full catalog and start building your own watchlist.</p>
+      </div>
+
+      <div class="landing-genres-grid">
+        <span class="landing-genre-chip">Action</span>
+        <span class="landing-genre-chip">Adventure</span>
+        <span class="landing-genre-chip">Crime</span>
+        <span class="landing-genre-chip">Drama</span>
+        <span class="landing-genre-chip">Fantasy</span>
+        <span class="landing-genre-chip">Romance</span>
+        <span class="landing-genre-chip">Sci-Fi</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-grid" #aboutSection>
     <div class="footer-item">
       
       <div class="footer-text">
@@ -106,7 +126,7 @@
       
       <div class="footer-text">
         <h3>Smart Search</h3>
-        <p>By genre,actor,title</p>
+        <p>By genre,title</p>
       </div>
     </div>
   </footer>
