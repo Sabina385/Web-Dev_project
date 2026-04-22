@@ -1,4 +1,4 @@
-/* --- Base Styles & Reset --- */
+
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +13,6 @@ body {
   overflow-x: hidden;
 }
 
-/* --- Header & Navbar --- */
 .header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   background: rgba(5, 5, 10, 0.8);
@@ -62,7 +61,7 @@ body {
   color: #ff5f2e;
 }
 
-/* --- Search & Logout --- */
+
 .input-logout-btn {
   display: flex;
   align-items: center;
@@ -82,7 +81,7 @@ body {
   background: transparent;
   border: none;
   cursor: pointer;
-  color:rgba(255,255,255); /* Красная иконка поиска */
+  color:rgba(255,255,255); 
   font-size: 17px;
   display: flex;
   align-items: center;
@@ -124,7 +123,8 @@ body {
 }
 
 
-/* --- Hero Section (Description) --- */
+
+
 .descript {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -138,7 +138,7 @@ body {
   font-weight: 900;
   line-height: 1.1;
   margin-bottom: 24px;
-  /* Тот самый градиент: от белого к ярко-красному */
+  
   background: linear-gradient(to bottom, #ffffff 30%, #ff5f2e 100%);
   background-clip: text;
   -webkit-background-clip: text;
@@ -472,22 +472,22 @@ body {
   cursor: pointer;
 }
 
-/* --- Scrollable Cards (Horizontal) --- */
+
 .scroll-container {
   display: flex;
   gap: 20px;
   overflow-x: auto;
   padding-bottom: 20px;
   scrollbar-width: none; 
-  -ms-overflow-style: none;/* Firefox */
+  -ms-overflow-style: none;
 }
 
 .scroll-container::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none; 
 }
 
 .movie-card-v3 {
-  flex: 0 0 320px; /* Ширина карточки как на Netflix */
+  flex: 0 0 320px; 
   transition: 0.4s ease;
   cursor: pointer;
 }
@@ -503,7 +503,7 @@ body {
 
 .img-box {
   position: relative;
-  aspect-ratio: 16 / 9; /* Кинематографичный формат */
+  aspect-ratio: 16 / 9; 
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 12px;
@@ -583,7 +583,7 @@ body {
   font-size: 14px;
 }
 
-/* --- Genres & Footer --- */
+
 .genres-grid {
   display: flex;
   flex-wrap: wrap;

@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Movie, Review, Recommendation, Watchlist, Rating } from '../models/movie.model';
 import { Observable } from 'rxjs';
+import { Movie, Review, Recommendation, Rating } from '../models/movie.model';
 
 export interface WatchlistResponse {
   message: string;
@@ -14,10 +14,10 @@ export interface RemoveWatchlistResponse {
 
 export interface ProfileResponse {
   username: string;
-  reviews: Review[];
-  ratings: Rating[];
-  watchlist: number[];
-  recommendations: { movie: string; to_user: string }[];
+  reviews: Array<Review & { movie: Movie }>;
+  ratings: Array<Rating & { movie: Movie }>;
+  watchlist: Movie[];
+  recommendations: { movie: Movie; to_user: string }[];
 }
 
 export interface RatingResponse {
@@ -25,6 +25,11 @@ export interface RatingResponse {
 }
 
 export interface ReviewResponse extends Review {}
+
+export interface RecommendationsResponse {
+  sent: Recommendation[];
+  received: Recommendation[];
+}
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -37,10 +42,10 @@ export class ApiService {
   recommendations = signal<Recommendation[]>([]);
   watchlist = signal<Movie[]>([]);
   currentUserToken = signal<string | null>(localStorage.getItem('token'));
+  searchQuery = signal<string>('');
 
-  
   getMovies() {
-    this.http.get<{results: Movie[]}>(`${this.baseUrl}movies/`).subscribe({
+    this.http.get<{ results: Movie[] }>(`${this.baseUrl}movies/`).subscribe({
       next: (res) => this.movies.set(res.results),
       error: (err) => console.error('Ошибка при загрузке фильмов:', err)
     });
@@ -57,8 +62,8 @@ export class ApiService {
   }
 
   getUserRecommendations() {
-    this.http.get<Recommendation[]>(`${this.baseUrl}recommendations/`).subscribe({
-      next: (res) => this.recommendations.set(res),
+    this.http.get<RecommendationsResponse>(`${this.baseUrl}recommendations/`).subscribe({
+      next: (res) => this.recommendations.set([...res.sent, ...res.received]),
       error: (err) => console.error('Ошибка при загрузке рекомендаций:', err)
     });
   }
@@ -98,13 +103,22 @@ export class ApiService {
     });
   }
 
-  getProfile() {
-    return this.http.get(this.baseUrl + 'profile/');
+  getRecommendations(): Observable<RecommendationsResponse> {
+    return this.http.get<RecommendationsResponse>(`${this.baseUrl}recommendations/`);
+  }
+
+  sendRecommendation(data: any): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}recommendations/send/`, data);
+  }
+
+  getProfile(): Observable<ProfileResponse> {
+    return this.http.get<ProfileResponse>(`${this.baseUrl}profile/`);
   }
 
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.baseUrl}login/`, credentials);
   }
+
   register(userData: any): Observable<any> {
     return this.http.post(`${this.baseUrl}register/`, userData);
   }

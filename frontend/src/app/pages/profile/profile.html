@@ -1,34 +1,127 @@
-<h2> Profile</h2>
+<app-navbar></app-navbar>
 
-<p><strong>Username:</strong> {{ profile?.username }}</p>
-
-<h3>Watchlist</h3>
-@for (movie of profile?.watchlist; track movie) {
-  <div>
-    Movie ID: {{ movie }}
-  </div>
-}
-
-
-<h3> Reviews</h3>
-@for (review of profile?.reviews; track review) {
-  <div>
-    {{ review.text }}
-  </div>
-}
-
-
-<h3> Ratings</h3>
-@for (rating of profile?.ratings; track rating) {
-  <div>
-    Movie: {{ rating.movie }} | Rating: {{ rating.value }}
-  </div>
-}
-
-
-<h3> Recommendations</h3>
-@for (recommendation of profile?.recommendations; track recommendation) {
-    <div>
-      {{ recommendation.movie }} → {{ recommendation.to_user }}
+<div class="profile">
+  @if (user()) {
+    <div class="profile-header">
+      <img src="https://png.pngtree.com/png-vector/20190316/ourmid/pngtree-movie-reel-icon-%7C-set-of-great-flat-icons-with-style-png-image_848558.jpg" alt="user icon">
+      <h2>{{ user().username }}</h2>
     </div>
-}
+  }
+
+  <div class="tabs">
+    <button (click)="setTab('activity')">Activity</button>
+    <button (click)="setTab('watchlist')">Watchlist</button>
+    <button (click)="setTab('recommendations')">Recommendations</button>
+  </div>
+
+  @if (activeTab() === 'activity') {
+    <div class="controls">
+      <select (change)="activityFilter.set($any($event.target).value)">
+        <option value="all">All</option>
+        <option value="reviews">Reviews</option>
+        <option value="ratings">Ratings</option>
+      </select>
+
+      <select (change)="activitySort.set($any($event.target).value)">
+        <option value="rating">Sort by Rating</option>
+        <option value="title">Sort by Title</option>
+      </select>
+    </div>
+
+    @for (item of filteredActivity(); track item.movie.id) {
+      <div class="card">
+        <div class="movie-card">
+          <img [src]="item.movie.images[0]?.image_url" [alt]="item.movie.title">
+          <div>
+            <h3>{{ item.movie.title }}</h3>
+            <p>{{ item.movie.rating_avg }}</p>
+          </div>
+        </div>
+
+        @if (item.rating) {
+          <p><strong>Your rate:</strong> {{ item.rating }}/10</p>
+        }
+
+        @if (item.review) {
+          <p><strong>Your review:</strong> {{ item.review }}</p>
+        }
+      </div>
+    }
+  }
+
+  @if (activeTab() === 'watchlist') {
+    <div class="controls">
+      <select (change)="watchlistSort.set($any($event.target).value)">
+        <option value="rating">Sort by Rating</option>
+        <option value="title">Sort by Title</option>
+      </select>
+    </div>
+
+    @for (movie of sortedWatchlist(); track movie.id) {
+      <div class="card">
+        <div class="movie-card">
+          <img [src]="movie.images[0]?.image_url" [alt]="movie.title">
+          <div>
+            <h3>{{ movie.title }}</h3>
+            <p>{{ movie.rating_avg }}</p>
+          </div>
+        </div>
+      </div>
+    }
+  }
+
+  <div class="recommendations">
+    @if (activeTab() === 'recommendations') {
+      <div class="tabs rec-tabs">
+        <button (click)="recommendationTab.set('send')">Send recommendation</button>
+        <button (click)="recommendationTab.set('sent')">Sent</button>
+        <button (click)="recommendationTab.set('received')">Received</button>
+      </div>
+
+      @if (recommendationTab() === 'send') {
+        <div class="card">
+          <input [(ngModel)]="recForm.to_username" placeholder="Username send to" required>
+          <input [(ngModel)]="recForm.movie_title" placeholder="Movie title">
+          <textarea [(ngModel)]="recForm.message" placeholder="Message (optional)"></textarea>
+          <button (click)="sendRec()" class="send-btn">Send</button>
+        </div>
+      }
+
+      @if (recommendationTab() === 'sent') {
+        @for (rec of sentRecs(); track rec.id) {
+          <div class="card">
+            <div class="movie-card">
+              <img [src]="rec.movie.images[0]?.image_url" [alt]="rec.movie.title">
+              <div>
+                <h3>{{ rec.movie.title }}</h3>
+                <p>{{ rec.movie.rating_avg }}</p>
+              </div>
+            </div>
+            <p>To: {{ rec.to_user.username }}</p>
+            @if (rec.message) {
+              <p>Message: {{ rec.message }}</p>
+            }
+          </div>
+        }
+      }
+
+      @if (recommendationTab() === 'received') {
+        @for (rec of receivedRecs(); track rec.id) {
+          <div class="card">
+            <div class="movie-card">
+              <img [src]="rec.movie.images[0]?.image_url" [alt]="rec.movie.title">
+              <div>
+                <h3>{{ rec.movie.title }}</h3>
+                <p>{{ rec.movie.rating_avg }}</p>
+              </div>
+            </div>
+            <p>From: {{ rec.from_user.username }}</p>
+            @if (rec.message) {
+              <p>Message: {{ rec.message }}</p>
+            }
+          </div>
+        }
+      }
+    }
+  </div>
+</div>

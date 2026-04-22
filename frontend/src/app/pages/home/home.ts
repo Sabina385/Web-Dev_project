@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { ApiService } from '../../services/api';
+import { NavbarComponent } from '../../common/navbar/navbar';
 import { Movie } from '../../models/movie.model';
 import { Review, Recommendation, Rating } from '../../models/movie.model';
 
@@ -13,7 +14,7 @@ import { Review, Recommendation, Rating } from '../../models/movie.model';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, NavbarComponent],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -24,8 +25,8 @@ export class HomeComponent implements OnInit {
   @ViewChild('selectedMovieSection') selectedMovieSection?: ElementRef<HTMLElement>;
   @ViewChild('popularScrollContainer') popularScrollContainer?: ElementRef<HTMLDivElement>;
 
-  searchQuery = signal('');
   selectedGenre = signal('');
+  searchQuery = signal('');
   selectedMovie = signal<Movie | null>(null);
   selectedMovieReviews = signal<Review[]>([]);
   reviewInput = signal('');
@@ -102,6 +103,12 @@ export class HomeComponent implements OnInit {
     this.searchQuery.set('');
   }
 
+  logout() {
+    localStorage.removeItem('token');
+    this.api.currentUserToken.set(null);
+    this.router.navigate(['/']);
+  }
+
   filterByGenre(genre: string) {
     this.selectedGenre.set(this.selectedGenre() === genre ? '' : genre);
     setTimeout(() => {
@@ -149,7 +156,10 @@ export class HomeComponent implements OnInit {
   }
 
   getUserRatingForMovie(movieId: number) {
-    return this.ratings().find(rating => rating.movie === movieId) || null;
+    return this.ratings().find(rating => {
+      const ratingMovieId = typeof rating.movie === 'number' ? rating.movie : rating.movie.id;
+      return ratingMovieId === movieId;
+    }) || null;
   }
 
   isInWatchlist(movieId: number) {
@@ -224,7 +234,10 @@ export class HomeComponent implements OnInit {
 
         if (existingRating) {
           this.api.ratings.set(
-            this.ratings().map(rating => rating.movie === movie.id ? updatedRating : rating)
+            this.ratings().map(rating => {
+              const ratingMovieId = typeof rating.movie === 'number' ? rating.movie : rating.movie.id;
+              return ratingMovieId === movie.id ? updatedRating : rating;
+            })
           );
         } else {
           this.api.ratings.set([updatedRating, ...this.ratings()]);
@@ -347,9 +360,5 @@ export class HomeComponent implements OnInit {
     img.src = 'https://via.placeholder.com/200x300/1a1a2e/888888?text=No+Image';
   }
 
-  logout() {
-
-    localStorage.removeItem('token');
-    this.router.navigate(['/']);
-  }
+  
 }

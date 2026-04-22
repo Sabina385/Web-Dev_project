@@ -49,14 +49,14 @@ export interface CastMovie {
 export interface Review {
   id: number;
   text: string;
-  movie: number;
+  movie: number | Movie;
   user: User;
 }
 
 export interface Rating {
   id: number;
   value: number;
-  movie: number;
+  movie: number | Movie;
   user: User | number;
 }
 
@@ -69,9 +69,9 @@ export interface Watchlist {
 
 export interface Recommendation {
   id: number;
-  from_user: number;
-  to_user: number;
-  movie: number;
+  from_user: User;
+  to_user: User;
+  movie: Movie;
   message: string;
   created_at: string;
 }

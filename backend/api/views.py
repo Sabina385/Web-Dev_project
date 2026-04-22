@@ -267,9 +267,13 @@ class RecommendationListAPIView(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
-        recs = Recommendation.objects.filter(to_user=request.user)
-        serializer = RecommendationSerializer(recs, many=True)
-        return Response(serializer.data)
+        sent = Recommendation.objects.filter(from_user=request.user)
+        received = Recommendation.objects.filter(to_user=request.user)
+
+        return Response({
+            'sent': RecommendationSerializer(sent, many=True).data,
+            'received': RecommendationSerializer(received, many=True).data,
+        })
       
 
 
@@ -286,12 +290,32 @@ class UserProfileAPIView(APIView):
 
         return Response({
             'username': user.username,
-            'reviews': ReviewSerializer(reviews, many=True).data,
-            'ratings': RatingSerializer(ratings, many=True).data,
-            'watchlist': [w.movie.id for w in watchlist],
+
+            'reviews': [
+                {
+                    'id': r.id,
+                    'text': r.text,
+                    'movie': MovieSerializer(r.movie).data
+                }
+                for r in reviews
+            ],
+
+            'ratings': [
+                {
+                    'id': rt.id,
+                    'value': rt.value,
+                    'movie': MovieSerializer(rt.movie).data
+                }
+                for rt in ratings
+            ],
+
+            'watchlist': MovieSerializer(
+                [w.movie for w in watchlist], many=True
+            ).data,
+
             'recommendations': [
                 {
-                    'movie': r.movie.title,
+                    'movie': MovieSerializer(r.movie).data,
                     'to_user': r.to_user.username
                 }
                 for r in recommendations
