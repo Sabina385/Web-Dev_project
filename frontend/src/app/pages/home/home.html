@@ -12,13 +12,52 @@
     </nav>
     <div class="input-logout-btn">
       <div class="search-bar">
-        <input type="text" placeholder="Search movies..." [(ngModel)]="searchQuery" (input)="onSearchChange()" class="search-input">
+        <input
+          type="text"
+          placeholder="Search by movie title..."
+          [value]="searchQuery()"
+          (input)="onSearchChange($event)"
+          class="search-input">
+        @if (searchQuery()) {
+          <button class="search-clear-btn" (click)="clearSearch()">×</button>
+        }
         <button class="search-btn">🔍︎</button>
       </div>
       <button (click)="logout()" class="logout-btn">Log out</button>
     </div>
   </div>
 </header>
+
+@if (searchQuery()) {
+  <section class="movie-row search-results-section">
+    <div class="row-header">
+      <h2 class="row-title">Search Results</h2>
+      <p class="search-results-label">for "{{ searchQuery() }}"</p>
+    </div>
+
+    @if (filteredMovies().length) {
+      <div class="scroll-container">
+        @for (movie of filteredMovies(); track movie.id) {
+          <div class="movie-card-v3" (click)="selectMovie(movie)" [class.active-movie]="selectedMovie()?.id === movie.id">
+            <div class="img-box">
+              <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title" (error)="onImageError($event)">
+              <div class="rating-tag">★ {{ movie.rating_avg || '0.0' }}</div>
+              <div class="hover-overlay"><button class="play-btn">▶</button></div>
+            </div>
+            <div class="info-box">
+              <h3>{{ movie.title }}</h3>
+              <p>{{ movie.release_year }} • {{ movie.duration }} min</p>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="search-empty-state">
+        <p>No movie found with that title.</p>
+      </div>
+    }
+  </section>
+}
 
 <section class="descript">
   <div class="descript-content">

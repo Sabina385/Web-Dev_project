@@ -49,8 +49,7 @@ export class HomeComponent implements OnInit {
 
     if (query) {
       movies = movies.filter(movie =>
-        movie.title.toLowerCase().includes(query) ||
-        movie.description.toLowerCase().includes(query)
+        movie.title.toLowerCase().includes(query)
       );
     }
 
@@ -94,8 +93,13 @@ export class HomeComponent implements OnInit {
     return !!localStorage.getItem('token');
   }
 
-  onSearchChange() {
-    
+  onSearchChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery.set(input.value);
+  }
+
+  clearSearch() {
+    this.searchQuery.set('');
   }
 
   filterByGenre(genre: string) {
