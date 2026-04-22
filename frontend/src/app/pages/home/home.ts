@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { ApiService } from '../../services/api';
+import { NavbarComponent } from '../../common/navbar/navbar';
 import { Movie } from '../../models/movie.model';
 import { Review, Recommendation } from '../../models/movie.model';
 
@@ -12,7 +13,7 @@ import { Review, Recommendation } from '../../models/movie.model';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, NavbarComponent],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -20,7 +21,7 @@ export class HomeComponent implements OnInit {
   private router = inject(Router);
   public api = inject(ApiService);
 
-  searchQuery = signal('');
+  searchQuery = this.api.searchQuery;
   selectedGenre = signal('');
   availableGenres = signal<string[]>([]);
   reviews = this.api.reviews;
@@ -76,7 +77,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.api.getMovies();
     this.api.getUserReviews();
-    this.api.getUserRecommendations();
+    this.api.getRecommendations();
     this.api.getUserWatchlist();
   }
 

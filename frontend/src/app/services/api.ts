@@ -13,6 +13,7 @@ export class ApiService {
   recommendations = signal<Recommendation[]>([]);
   watchlist = signal<Movie[]>([]);
   currentUserToken = signal<string | null>(localStorage.getItem('token'));
+  searchQuery = signal<string>('');
 
   
   getMovies() {
@@ -29,11 +30,12 @@ export class ApiService {
     });
   }
 
-  getUserRecommendations() {
-    this.http.get<Recommendation[]>(`${this.baseUrl}recommendations/`).subscribe({
-      next: (res) => this.recommendations.set(res),
-      error: (err) => console.error('Ошибка при загрузке рекомендаций:', err)
-    });
+  getRecommendations() {
+    return this.http.get(`${this.baseUrl}recommendations/`);
+  }
+
+  sendRecommendation(data: any) {
+    return this.http.post(`${this.baseUrl}recommendations/send/`, data);
   }
 
   getUserWatchlist() {
@@ -44,7 +46,7 @@ export class ApiService {
   }
 
   getProfile() {
-    return this.http.get(this.baseUrl + 'profile/');
+    return this.http.get(`${this.baseUrl}profile/`);
   }
 
   login(credentials: any): Observable<any> {
