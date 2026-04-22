@@ -107,6 +107,32 @@ export class ProfileComponent implements OnInit {
     return data;
   });
 
+  removeFromWatchlist(movieId: number) {
+    this.api.removeFromWatchlist(movieId).subscribe({
+      next: () => {
+        this.watchlist.update(list =>
+          list.filter(movie => movie.id !== movieId)
+        );
+
+        alert('Removed from watchlist');
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to remove');
+      }
+    });
+  }
+
+  clearWatchlist() {
+    const movies = this.watchlist();
+
+    movies.forEach(m => {
+      this.api.removeFromWatchlist(m.id).subscribe();
+    });
+
+    this.watchlist.set([]);
+  }
+
   ngOnInit() {
     this.loadData();
   }

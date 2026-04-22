@@ -2,7 +2,6 @@ import { Component, OnInit, inject, computed, signal, effect, ElementRef, ViewCh
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
 
 import { ApiService } from '../../services/api';
 import { NavbarComponent } from '../../common/navbar/navbar';
@@ -14,19 +13,18 @@ import { Review, Recommendation, Rating } from '../../models/movie.model';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, NavbarComponent],
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
 export class HomeComponent implements OnInit {
-  private router = inject(Router);
   public api = inject(ApiService);
   @ViewChild('genreResultsSection') genreResultsSection?: ElementRef<HTMLElement>;
   @ViewChild('selectedMovieSection') selectedMovieSection?: ElementRef<HTMLElement>;
   @ViewChild('popularScrollContainer') popularScrollContainer?: ElementRef<HTMLDivElement>;
 
   selectedGenre = signal('');
-  searchQuery = signal('');
+  searchQuery = this.api.searchQuery;
   selectedMovie = signal<Movie | null>(null);
   selectedMovieReviews = signal<Review[]>([]);
   reviewInput = signal('');
@@ -43,25 +41,25 @@ export class HomeComponent implements OnInit {
  
 
   filteredMovies = computed(() => {
-    let movies = this.api.movies();
+  let movies = this.api.movies();
 
-    const query = this.searchQuery().toLowerCase().trim();
-    const genre = this.selectedGenre();
+  const query = this.api.searchQuery().toLowerCase().trim();
+  const genre = this.selectedGenre();
 
-    if (query) {
-      movies = movies.filter(movie =>
-        movie.title.toLowerCase().includes(query)
-      );
-    }
+  if (query) {
+    movies = movies.filter(movie =>
+      movie.title.toLowerCase().includes(query)
+    );
+  }
 
-    if (genre) {
-      movies = movies.filter(movie =>
-        movie.genres.some(g => g.genre.name === genre)
-      );
-    }
+  if (genre) {
+    movies = movies.filter(movie =>
+      movie.genres.some(g => g.genre.name === genre)
+    );
+  }
 
-    return movies;
-  });
+  return movies;
+});
 
   popularMovies = computed(() => {
     return [...this.api.movies()]
@@ -90,24 +88,10 @@ export class HomeComponent implements OnInit {
   }
   
 
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
-  }
-
-  onSearchChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.searchQuery.set(input.value);
-  }
-
-  clearSearch() {
-    this.searchQuery.set('');
-  }
-
-  logout() {
-    localStorage.removeItem('token');
-    this.api.currentUserToken.set(null);
-    this.router.navigate(['/']);
-  }
+  // isLoggedIn(): boolean {
+  //   return !!localStorage.getItem('token');
+  // }
+ 
 
   filterByGenre(genre: string) {
     this.selectedGenre.set(this.selectedGenre() === genre ? '' : genre);

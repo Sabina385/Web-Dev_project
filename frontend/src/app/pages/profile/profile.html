@@ -50,24 +50,33 @@
   }
 
   @if (activeTab() === 'watchlist') {
-    <div class="controls">
-      <select (change)="watchlistSort.set($any($event.target).value)">
-        <option value="rating">Sort by Rating</option>
-        <option value="title">Sort by Title</option>
-      </select>
-    </div>
-
-    @for (movie of sortedWatchlist(); track movie.id) {
-      <div class="card">
-        <div class="movie-card">
-          <img [src]="movie.images[0]?.image_url" [alt]="movie.title">
-          <div>
-            <h3>{{ movie.title }}</h3>
-            <p>{{ movie.rating_avg }}</p>
-          </div>
-        </div>
+    <div class="watchlist">
+      <div class="controls">
+        <select (change)="watchlistSort.set($any($event.target).value)">
+          <option value="rating">Sort by Rating</option>
+          <option value="title">Sort by Title</option>
+        </select>
+        <button (click)="clearWatchlist()">Clear Watchlist</button>
       </div>
-    }
+
+      @for (movie of sortedWatchlist(); track movie.id) {
+        <div class="card">
+          <div class="movie-card">
+            <img [src]="movie.images[0]?.image_url" [alt]="movie.title">
+            <div>
+              <h3>{{ movie.title }}</h3>
+              <p class="rating">{{ movie.rating_avg }}</p>
+              <p>{{ movie.description }}</p>
+            </div>
+          </div>
+          <button 
+            class="remove-btn"
+            (click)="removeFromWatchlist(movie.id)">
+            Remove
+          </button>
+        </div>
+      }
+    </div>
   }
 
   <div class="recommendations">

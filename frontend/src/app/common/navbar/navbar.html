@@ -1,34 +1,32 @@
+
 <header class="header">
   <div class="header-content">
-
     <div class="logo">
       <i class="play-icon"></i>
       <span>Movie Club</span>
     </div>
-
     <nav class="nav-menu">
-      <a routerLink="/home" routerLinkActive="active" class="nav-link">Home</a>
-      <a routerLink="/catalog" routerLinkActive="active" class="nav-link">Catalog</a>
-      <a routerLink="/recommendations" routerLinkActive="active" class="nav-link">Recommendations</a>
-      <a routerLink="/profile" routerLinkActive="active" class="nav-link">Profile</a>
+      <a routerLink="/home" class="nav-link active">Home</a>
+      <a routerLink="/home" class="nav-link">Catalog</a>
+      <a routerLink="/home" class="nav-link">Recommendations</a>
+      <a routerLink="/profile" class="nav-link">Profile</a>
     </nav>
-
+    
     <div class="input-logout-btn">
-
       <div class="search-bar">
         <input
-            type="text"
-            placeholder="Search movies..."
-            [ngModel]="searchQuery()"
-            (ngModelChange)="searchQuery.set($event)"
-            class="search-input"
-        />
-        <button class="search-btn">🔍</button>
+          type="text"
+          placeholder="Search by movie title..."
+          [value]="searchQuery()"
+          (input)="searchQuery.set($event.target.value)"
+          class="search-input">
+        @if (searchQuery()) {
+          <button class="search-clear-btn" (click)="clearSearch()">×</button>
+        }
+        <button class="search-btn">🔍︎</button>
       </div>
-
       <button (click)="logout()" class="logout-btn">Log out</button>
-
     </div>
-
   </div>
 </header>
+

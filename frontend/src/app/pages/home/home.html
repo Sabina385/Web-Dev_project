@@ -1,280 +1,321 @@
-<header class="header">
-  <div class="header-content">
-    <div class="logo">
-      <i class="play-icon"></i>
-      <span>Movie Club</span>
-    </div>
-    <nav class="nav-menu">
-      <a routerLink="/home" class="nav-link active">Home</a>
-      <a routerLink="/home" class="nav-link">Catalog</a>
-      <a routerLink="/home" class="nav-link">Recommendations</a>
-      <a routerLink="/profile" class="nav-link">Profile</a>
-    </nav>
-    <div class="input-logout-btn">
-      <div class="search-bar">
-        <input
-          type="text"
-          placeholder="Search by movie title..."
-          [value]="searchQuery()"
-          (input)="onSearchChange($event)"
-          class="search-input">
-        @if (searchQuery()) {
-          <button class="search-clear-btn" (click)="clearSearch()">×</button>
-        }
-        <button class="search-btn">🔍︎</button>
-      </div>
-      <button (click)="logout()" class="logout-btn">Log out</button>
-    </div>
-  </div>
-</header>
 <app-navbar></app-navbar>
-
 
 @if (searchQuery()) {
   <section class="movie-row search-results-section">
     <div class="row-header">
-      <h2 class="row-title">Search Results</h2>
-      <p class="search-results-label">for "{{ searchQuery() }}"</p>
+    <h2 class="row-title">Search Results</h2>
+    <p class="search-results-label">for "{{ searchQuery() }}"</p>
     </div>
 
     @if (filteredMovies().length) {
       <div class="scroll-container">
         @for (movie of filteredMovies(); track movie.id) {
           <div class="movie-card-v3" (click)="selectMovie(movie)" [class.active-movie]="selectedMovie()?.id === movie.id">
-            <div class="img-box">
+              <div class="img-box">
               <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title" (error)="onImageError($event)">
               <div class="rating-tag">★ {{ movie.rating_avg || '0.0' }}</div>
               <div class="hover-overlay"><button class="play-btn">▶</button></div>
-            </div>
-            <div class="info-box">
+              </div>
+              <div class="info-box">
               <h3>{{ movie.title }}</h3>
               <p>{{ movie.release_year }} • {{ movie.duration }} min</p>
-            </div>
+              </div>
           </div>
         }
       </div>
-    } @else {
-      <div class="search-empty-state">
-        <p>No movie found with that title.</p>
-      </div>
-    }
+      } @else {
+        <div class="search-empty-state">
+            <p>No movie found with that title.</p>
+        </div>
+      }
   </section>
-}
-
-<section class="descript">
-  <div class="descript-content">
-    <h1 class="descript-title">Discover, Rate, and Share Movies</h1>
-    <p class="descript-text">
-      Join our community of movie lovers. Discover new films, rate your favorites,
-      and get personalized recommendations based on your taste.
-    </p>
-  
-  </div>
-  <div class="descript-image">
-   
-  </div>
-</section>
-
-@if (selectedMovie(); as movie) {
-  <section class="selected-movie-section" #selectedMovieSection>
-    <div class="selected-movie-content">
-      <div class="selected-movie-info">
-        <p class="selected-movie-label">Selected Movie</p>
-        <h2 class="selected-movie-title">{{ movie.title }}</h2>
-        <p class="selected-movie-meta">
-          {{ movie.release_year }} • {{ movie.duration }} min • {{ selectedMovieGenres() }}
-        </p>
-        <div class="selected-movie-rating-panel">
-          <div class="rating-summary">
-            <span class="rating-summary-label">Average</span>
-            <strong class="rating-summary-value">{{ selectedMovieAverageRating() }}/10</strong>
-          </div>
-          <div class="rating-input-row">
-            <input
-              id="movie-rating"
-              class="rating-number-input"
-              type="number"
-              min="1"
-              max="10"
-              step="0.1"
-              placeholder="1-10"
-              [value]="ratingInput()"
-              (input)="onRatingInput($event)">
-            <button class="save-rating-btn" (click)="saveSelectedMovieRating()">Save Rating</button>
-          </div>
-          @if (ratingMessage()) {
-            <p class="rating-message">{{ ratingMessage() }}</p>
-          }
-        </div>
-        <p class="selected-movie-description">
-          {{ movie.description }}
-        </p>
-
-        <div class="selected-movie-actions">
-          <button class="primary-action-btn" (click)="watchSelectedMovie()">Watch</button>
-          <button class="secondary-action-btn" (click)="addSelectedToWatchlist()">Add to Watchlist</button>
-        </div>
-
-        @if (watchlistMessage()) {
-          <p class="watchlist-message">{{ watchlistMessage() }}</p>
-        }
-
-        <div class="movie-reviews">
-          <h3 class="movie-reviews-title">Reviews</h3>
-
-          <div class="review-form">
-            <textarea
-              class="review-textarea"
-              rows="3"
-              placeholder="Write your comment about this movie..."
-              [value]="reviewInput()"
-              (input)="onReviewInput($event)"></textarea>
-            <div class="review-form-actions">
-              <button class="post-review-btn" (click)="submitSelectedMovieReview()">Post Review</button>
-              @if (reviewMessage()) {
-                <p class="review-message">{{ reviewMessage() }}</p>
-              }
+  @if (selectedMovie(); as movie) {
+    <section class="selected-movie-section" #selectedMovieSection>
+      <div class="selected-movie-content">
+        <div class="selected-movie-info">
+          <p class="selected-movie-label">Selected Movie</p>
+          <h2 class="selected-movie-title">{{ movie.title }}</h2>
+          <p class="selected-movie-meta">
+            {{ movie.release_year }} • {{ movie.duration }} min • {{ selectedMovieGenres() }}
+          </p>
+          <div class="selected-movie-rating-panel">
+            <div class="rating-summary">
+              <span class="rating-summary-label">Average</span>
+              <strong class="rating-summary-value">{{ selectedMovieAverageRating() }}/10</strong>
             </div>
+            <div class="rating-input-row">
+              <input
+                id="movie-rating"
+                class="rating-number-input"
+                type="number"
+                min="1"
+                max="10"
+                step="0.1"
+                placeholder="1-10"
+                [value]="ratingInput()"
+                (input)="onRatingInput($event)">
+              <button class="save-rating-btn" (click)="saveSelectedMovieRating()">Save Rating</button>
+            </div>
+            @if (ratingMessage()) {
+              <p class="rating-message">{{ ratingMessage() }}</p>
+            }
+          </div>
+          <p class="selected-movie-description">
+            {{ movie.description }}
+          </p>
+
+          <div class="selected-movie-actions">
+            <button class="primary-action-btn" (click)="watchSelectedMovie()">Watch</button>
+            <button class="secondary-action-btn" (click)="addSelectedToWatchlist()">Add to Watchlist</button>
           </div>
 
-          @if (selectedMovieReviews().length) {
-            <div class="reviews-list">
-              @for (review of selectedMovieReviews(); track review.id) {
-                <div class="review-card">
-                  <p class="review-author">{{ getReviewAuthor(review) }}</p>
-                  <p class="review-text">{{ review.text }}</p>
-                </div>
-              }
-            </div>
-          } @else {
-            <p class="reviews-empty">No reviews yet for this movie.</p>
+          @if (watchlistMessage()) {
+            <p class="watchlist-message">{{ watchlistMessage() }}</p>
           }
+
+          <div class="movie-reviews">
+            <h3 class="movie-reviews-title">Reviews</h3>
+
+            <div class="review-form">
+              <textarea
+                class="review-textarea"
+                rows="3"
+                placeholder="Write your comment about this movie..."
+                [value]="reviewInput()"
+                (input)="onReviewInput($event)"></textarea>
+              <div class="review-form-actions">
+                <button class="post-review-btn" (click)="submitSelectedMovieReview()">Post Review</button>
+                @if (reviewMessage()) {
+                  <p class="review-message">{{ reviewMessage() }}</p>
+                }
+              </div>
+            </div>
+
+            @if (selectedMovieReviews().length) {
+              <div class="reviews-list">
+                @for (review of selectedMovieReviews(); track review.id) {
+                  <div class="review-card">
+                    <p class="review-author">{{ getReviewAuthor(review) }}</p>
+                    <p class="review-text">{{ review.text }}</p>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="reviews-empty">No reviews yet for this movie.</p>
+            }
+          </div>
+        </div>
+
+        <div class="selected-movie-poster">
+          <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title" (error)="onImageError($event)">
         </div>
       </div>
-
-      <div class="selected-movie-poster">
-        <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title" (error)="onImageError($event)">
-      </div>
+    </section>
+  }
+} @else {
+  <section class="descript">
+    <div class="descript-content">
+      <h1 class="descript-title">Discover, Rate, and Share Movies</h1>
+      <p class="descript-text">
+        Join our community of movie lovers. Discover new films, rate your favorites,
+        and get personalized recommendations based on your taste.
+      </p>
+    
+    </div>
+    <div class="descript-image">
+    
     </div>
   </section>
-}
 
-<section class="movie-row">
+  @if (selectedMovie(); as movie) {
+    <section class="selected-movie-section" #selectedMovieSection>
+      <div class="selected-movie-content">
+        <div class="selected-movie-info">
+          <p class="selected-movie-label">Selected Movie</p>
+          <h2 class="selected-movie-title">{{ movie.title }}</h2>
+          <p class="selected-movie-meta">
+            {{ movie.release_year }} • {{ movie.duration }} min • {{ selectedMovieGenres() }}
+          </p>
+          <div class="selected-movie-rating-panel">
+            <div class="rating-summary">
+              <span class="rating-summary-label">Average</span>
+              <strong class="rating-summary-value">{{ selectedMovieAverageRating() }}/10</strong>
+            </div>
+            <div class="rating-input-row">
+              <input
+                id="movie-rating"
+                class="rating-number-input"
+                type="number"
+                min="1"
+                max="10"
+                step="0.1"
+                placeholder="1-10"
+                [value]="ratingInput()"
+                (input)="onRatingInput($event)">
+              <button class="save-rating-btn" (click)="saveSelectedMovieRating()">Save Rating</button>
+            </div>
+            @if (ratingMessage()) {
+              <p class="rating-message">{{ ratingMessage() }}</p>
+            }
+          </div>
+          <p class="selected-movie-description">
+            {{ movie.description }}
+          </p>
 
-  <div class="row-header">
+          <div class="selected-movie-actions">
+            <button class="primary-action-btn" (click)="watchSelectedMovie()">Watch</button>
+            <button class="secondary-action-btn" (click)="addSelectedToWatchlist()">Add to Watchlist</button>
+          </div>
 
-    <h2 class="row-title">Popular Movies</h2>
+          @if (watchlistMessage()) {
+            <p class="watchlist-message">{{ watchlistMessage() }}</p>
+          }
 
-    <button class="see-all-btn" (click)="scrollPopularMovies()">View All →</button>
+          <div class="movie-reviews">
+            <h3 class="movie-reviews-title">Reviews</h3>
 
-  </div>
+            <div class="review-form">
+              <textarea
+                class="review-textarea"
+                rows="3"
+                placeholder="Write your comment about this movie..."
+                [value]="reviewInput()"
+                (input)="onReviewInput($event)"></textarea>
+              <div class="review-form-actions">
+                <button class="post-review-btn" (click)="submitSelectedMovieReview()">Post Review</button>
+                @if (reviewMessage()) {
+                  <p class="review-message">{{ reviewMessage() }}</p>
+                }
+              </div>
+            </div>
 
-  <div class="scroll-container" #popularScrollContainer>
-
-    @for (movie of popularMovies(); track movie.id) {
-
-      <div class="movie-card-v3" (click)="selectMovie(movie)" [class.active-movie]="selectedMovie()?.id === movie.id">
-
-        <div class="img-box">
-
-          <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title">
-
-          <div class="rating-tag">★ {{ movie.rating_avg || '0.0' }}</div>
-
-          <div class="hover-overlay"><button class="play-btn">▶</button></div>
-
+            @if (selectedMovieReviews().length) {
+              <div class="reviews-list">
+                @for (review of selectedMovieReviews(); track review.id) {
+                  <div class="review-card">
+                    <p class="review-author">{{ getReviewAuthor(review) }}</p>
+                    <p class="review-text">{{ review.text }}</p>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="reviews-empty">No reviews yet for this movie.</p>
+            }
+          </div>
         </div>
 
-        <div class="info-box">
-
-          <h3>{{ movie.title }}</h3>
-
-          <p>{{ movie.release_year }} • {{ movie.duration }} min</p>
-
+        <div class="selected-movie-poster">
+          <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title" (error)="onImageError($event)">
         </div>
-
       </div>
+    </section>
+  }
 
-    }
-
-  </div>
-
-</section>
-
-<section class="movie-row">
-  <div class="row-header">
-    <h2 class="row-title">Browse by Genre</h2>
-    @if (selectedGenre()) {
-      <button class="see-all-btn" (click)="clearGenreFilter()">Clear Filter</button>
-    }
-  </div>
-  <div class="genres-grid">
-    @for (genre of availableGenres(); track genre) {
-      <button (click)="filterByGenre(genre)" class="genre-btn" [class.active]="selectedGenre() === genre">
-        {{ genre }}
-      </button>
-    }
-  </div>
-</section>
-
-@if (selectedGenre()) {
-  <section class="movie-row" #genreResultsSection>
+  <section class="movie-row">
     <div class="row-header">
-      <h2 class="row-title">{{ selectedGenre() }} Movies</h2>
+      <h2 class="row-title">Popular Movies</h2>
+      <button class="see-all-btn" (click)="scrollPopularMovies()">View All →</button>
+
     </div>
 
-    @if (filteredMovies().length) {
-      <div class="scroll-container">
-        @for (movie of filteredMovies(); track movie.id) {
-          <div class="movie-card-v3" (click)="selectMovie(movie)" [class.active-movie]="selectedMovie()?.id === movie.id">
-            <div class="img-box">
-              <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title" (error)="onImageError($event)">
-              <div class="rating-tag">★ {{ movie.rating_avg || '0.0' }}</div>
-              <div class="hover-overlay"><button class="play-btn">▶</button></div>
-            </div>
-            <div class="info-box">
-              <h3>{{ movie.title }}</h3>
-              <p>{{ movie.release_year }} • {{ movie.duration }} min</p>
-            </div>
-          </div>
-        }
-      </div>
-    } @else {
-      <p class="genre-empty">No movies found for {{ selectedGenre() }}.</p>
-    }
-  </section>
-}
-
-<section class="movie-row">
-  <div class="row-header">
-    <h2 class="row-title">Your Watchlist</h2>
-    <button class="see-all-btn" (click)="toggleWatchlistEditing()">
-      {{ isEditingWatchlist() ? 'Done' : 'Edit List' }}
-    </button>
-  </div>
-  @if (watchlistMovies().length) {
-    <div class="scroll-container">
-      @for (movie of watchlistMovies(); track movie.id) {
+    <div class="scroll-container" #popularScrollContainer>
+      @for (movie of popularMovies(); track movie.id) {
         <div class="movie-card-v3" (click)="selectMovie(movie)" [class.active-movie]="selectedMovie()?.id === movie.id">
           <div class="img-box">
-            @if (isEditingWatchlist()) {
-              <button class="remove-watchlist-btn" (click)="removeFromWatchlist(movie, $event)">Remove</button>
-            }
+            <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title">
+
             <div class="rating-tag">★ {{ movie.rating_avg || '0.0' }}</div>
-            <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title" (error)="onImageError($event)">
+
             <div class="hover-overlay"><button class="play-btn">▶</button></div>
+
           </div>
+
           <div class="info-box">
             <h3>{{ movie.title }}</h3>
             <p>{{ movie.release_year }} • {{ movie.duration }} min</p>
+
           </div>
         </div>
       }
     </div>
-  } @else {
-    <p class="watchlist-empty">Your watchlist is empty. Add a movie above and it will appear here.</p>
+  </section>
+
+  <section class="movie-row">
+    <div class="row-header">
+      <h2 class="row-title">Browse by Genre</h2>
+      @if (selectedGenre()) {
+        <button class="see-all-btn" (click)="clearGenreFilter()">Clear Filter</button>
+      }
+    </div>
+    <div class="genres-grid">
+      @for (genre of availableGenres(); track genre) {
+        <button (click)="filterByGenre(genre)" class="genre-btn" [class.active]="selectedGenre() === genre">
+          {{ genre }}
+        </button>
+      }
+    </div>
+  </section>
+
+  @if (selectedGenre()) {
+    <section class="movie-row" #genreResultsSection>
+      <div class="row-header">
+        <h2 class="row-title">{{ selectedGenre() }} Movies</h2>
+      </div>
+
+      @if (filteredMovies().length) {
+        <div class="scroll-container">
+          @for (movie of filteredMovies(); track movie.id) {
+            <div class="movie-card-v3" (click)="selectMovie(movie)" [class.active-movie]="selectedMovie()?.id === movie.id">
+              <div class="img-box">
+                <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title" (error)="onImageError($event)">
+                <div class="rating-tag">★ {{ movie.rating_avg || '0.0' }}</div>
+                <div class="hover-overlay"><button class="play-btn">▶</button></div>
+              </div>
+              <div class="info-box">
+                <h3>{{ movie.title }}</h3>
+                <p>{{ movie.release_year }} • {{ movie.duration }} min</p>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="genre-empty">No movies found for {{ selectedGenre() }}.</p>
+      }
+    </section>
   }
-</section>
+
+  <section class="movie-row">
+    <div class="row-header">
+      <h2 class="row-title">Your Watchlist</h2>
+      <button class="see-all-btn" (click)="toggleWatchlistEditing()">
+        {{ isEditingWatchlist() ? 'Done' : 'Edit List' }}
+      </button>
+    </div>
+    @if (watchlistMovies().length) {
+      <div class="scroll-container">
+        @for (movie of watchlistMovies(); track movie.id) {
+          <div class="movie-card-v3" (click)="selectMovie(movie)" [class.active-movie]="selectedMovie()?.id === movie.id">
+            <div class="img-box">
+              @if (isEditingWatchlist()) {
+                <button class="remove-watchlist-btn" (click)="removeFromWatchlist(movie, $event)">Remove</button>
+              }
+              <div class="rating-tag">★ {{ movie.rating_avg || '0.0' }}</div>
+              <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title" (error)="onImageError($event)">
+              <div class="hover-overlay"><button class="play-btn">▶</button></div>
+            </div>
+            <div class="info-box">
+              <h3>{{ movie.title }}</h3>
+              <p>{{ movie.release_year }} • {{ movie.duration }} min</p>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="watchlist-empty">Your watchlist is empty. Add a movie above and it will appear here.</p>
+    }
+  </section>
+
+}
 
 <footer class="footer">
   <div class="footer-content">

@@ -1,7 +1,7 @@
 *{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 /* Base */
@@ -108,12 +108,30 @@
   box-shadow: 0 0 10px rgba(255, 95, 46, 0.2);
 }
 
-
 .controls select option {
   background-color: #0d0d12;
   color: white;
   padding: 10px;
 }
+
+.controls button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.controls button:hover {
+  background: rgba(230, 57, 70, 0.1); /* Subtle red tint */
+  border-color: #e63946;
+  color: #e63946;
+}
+
 
 /* Cards */
 .card {
@@ -152,7 +170,7 @@
   font-weight: 700;
 }
 
-.movie-card p {
+.movie-card .rating {
   color: #ffcc00;
   font-weight: 800;
   margin: 0;
@@ -162,8 +180,28 @@
   gap: 4px;
 }
 
-.movie-card p::before {
+.movie-card .rating::before {
   content: '★';
+}
+
+.watchlist .remove-btn {
+  background: transparent;
+  border: 1px solid rgba(230, 57, 70, 0.2);
+  color: #a0a0a8;
+  margin-top: 20px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.remove-btn:hover {
+  background: #e63946;
+  border-color: #e63946;
+  color: white;
+  box-shadow: 0 0 15px rgba(230, 57, 70, 0.4);
 }
 
 /* Recommendation tab */
