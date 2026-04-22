@@ -21,34 +21,13 @@ export class HomeComponent implements OnInit {
   private router = inject(Router);
   public api = inject(ApiService);
 
-  searchQuery = this.api.searchQuery;
   selectedGenre = signal('');
   availableGenres = signal<string[]>([]);
   reviews = this.api.reviews;
   recommendations = this.api.recommendations;
   watchlist = this.api.watchlist;
 
-  filteredMovies = computed(() => {
-    let movies = this.api.movies();
-
-    const query = this.searchQuery().toLowerCase().trim();
-    const genre = this.selectedGenre();
-
-    if (query) {
-      movies = movies.filter(movie =>
-        movie.title.toLowerCase().includes(query) ||
-        movie.description.toLowerCase().includes(query)
-      );
-    }
-
-    if (genre) {
-      movies = movies.filter(movie =>
-        movie.genres.some(g => g.genre.name === genre)
-      );
-    }
-
-    return movies;
-  });
+  
 
   popularMovies = computed(() => {
     return this.api.movies()
@@ -85,10 +64,6 @@ export class HomeComponent implements OnInit {
     return !!localStorage.getItem('token');
   }
 
-  onSearchChange() {
-    
-  }
-
   filterByGenre(genre: string) {
     this.selectedGenre.set(genre);
   }
@@ -116,9 +91,5 @@ export class HomeComponent implements OnInit {
     img.src = 'https://via.placeholder.com/200x300/1a1a2e/888888?text=No+Image';
   }
 
-  logout() {
-
-    localStorage.removeItem('token');
-    this.router.navigate(['/']);
-  }
+  
 }

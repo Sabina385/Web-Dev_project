@@ -19,7 +19,19 @@
 
   <!-- Activity -->
   @if (activeTab() === 'activity') {
-    @for (item of activity(); track item.id) {
+    <div class="controls">
+      <select (change)="activityFilter.set($any($event.target).value)">
+        <option value="all">All</option>
+        <option value="reviews">Reviews</option>
+        <option value="ratings">Ratings</option>
+      </select>
+
+      <select (change)="activitySort.set($any($event.target).value)">
+        <option value="rating">Sort by Rating</option>
+        <option value="title">Sort by Title</option>
+      </select>
+    </div>
+    @for (item of filteredActivity(); track item.id) {
       <div class="card">
 
         <!-- Movie -->
@@ -52,7 +64,13 @@
 
   <!-- Watchlist -->
   @if (activeTab() === 'watchlist') {
-    @for (movie of watchlist(); track movie.id) {
+    <div class="controls">
+      <select (change)="watchlistSort.set($any($event.target).value)">
+        <option value="rating">Sort by Rating</option>
+        <option value="title">Sort by Title</option>
+      </select>
+    </div>
+    @for (movie of sortedWatchlist(); track movie.id) {
       <div class="card">
         <div class="movie-card">
           <img [src]="movie.images[0]?.image_url" />
@@ -76,9 +94,9 @@
       
       @if(recommendationTab() === 'send'){
         <div class="card">
-          <input [(ngModel)]="recForm.to_username" placeholder="Username send to" required=""/>
-          <input [(ngModel)]="recForm.movie_title" placeholder="Movie title" required=""/>
-          <textarea [(ngModel)]="recForm.message" placeholder="Message"></textarea>
+          <input [(ngModel)]="recForm.to_username" placeholder="Username send to" required/>
+          <input [(ngModel)]="recForm.movie_title" placeholder="Movie title"/>
+          <textarea [(ngModel)]="recForm.message" placeholder="Message (optional)"></textarea>
 
           <button (click)="sendRec()" class="send-btn">Send</button>
         </div>
@@ -95,9 +113,9 @@
             </div>
 
             <p>To: {{ rec.to_user.username }}</p>
-          
+            
             @if (rec.message) {
-              <p>{{ rec.message }}</p>
+              <p>Message: {{ rec.message }}</p>
             }
           </div>
         }
@@ -116,7 +134,7 @@
             <p>From: {{ rec.from_user.username }}</p>
           
             @if (rec.message) {
-              <p>{{ rec.message }}</p>
+              <p>Message: {{ rec.message }}</p>
             }
           </div>
         }

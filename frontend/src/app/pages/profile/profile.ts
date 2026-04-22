@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api';
@@ -12,7 +12,8 @@ import { NavbarComponent } from "../../common/navbar/navbar";
   styleUrl: './profile.css'
 })
 export class ProfileComponent implements OnInit {
-  
+  public api = inject(ApiService);
+
   user = signal<any>(null);
   activity = signal<any[]>([]);
   watchlist = signal<any[]>([]);
@@ -20,6 +21,11 @@ export class ProfileComponent implements OnInit {
 
   activeTab = signal<'activity' | 'watchlist' | 'recommendations'>('activity');
   recommendationTab = signal<'send' | 'sent' | 'received'>('send');
+  
+  activityFilter = signal<'all' | 'reviews' | 'ratings'>('all');
+  activitySort = signal<'rating' | 'title'>('rating');
+
+  watchlistSort = signal<'rating' | 'title'>('rating');
 
   recForm = {
     to_username: '',
@@ -30,14 +36,76 @@ export class ProfileComponent implements OnInit {
   sentRecs = signal<any[]>([]);
   receivedRecs = signal<any[]>([]);
   
+  movieList() {
+    return this.api.movies();
+  }
+
   sendRec() {
-    this.api.sendRecommendation(this.recForm).subscribe(() => {
-      alert('Sent!');
-      this.recForm = { to_username: '', movie_title: '', message: '' };
+    const payload: any = {
+      to_username: this.recForm.to_username,
+      movie_title: this.recForm.movie_title,
+    };
+
+    if (this.recForm.message && this.recForm.message.trim() !== '') {
+      payload.message = this.recForm.message;
+    }
+
+    this.api.sendRecommendation(payload).subscribe({
+      next: () => {
+        alert('Sent!');
+        this.recForm = { to_username: '', movie_title: '', message: '' };
+        this.loadData();
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to send');
+      }
     });
   }
 
-  constructor(private api: ApiService) {}
+  filteredActivity = computed(() => {
+    let data = this.activity();
+
+    // filter
+    const filter = this.activityFilter();
+    if (filter === 'reviews') {
+      data = data.filter(i => i.review);
+    } else if (filter === 'ratings') {
+      data = data.filter(i => i.rating);
+    }
+
+    // sort
+    const sort = this.activitySort();
+    if (sort === 'rating') {
+      data = [...data].sort((a, b) =>
+        (b.movie.rating_avg || 0) - (a.movie.rating_avg || 0)
+      );
+    } else if (sort === 'title') {
+      data = [...data].sort((a, b) =>
+        a.movie.title.localeCompare(b.movie.title)
+      );
+    }
+
+    return data;
+  });
+
+  sortedWatchlist = computed(() => {
+    let data = this.watchlist();
+
+    const sort = this.watchlistSort();
+
+    if (sort === 'rating') {
+      data = [...data].sort((a, b) =>
+        (b.rating_avg || 0) - (a.rating_avg || 0)
+      );
+    } else if (sort === 'title') {
+      data = [...data].sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+    }
+
+    return data;
+  });
 
   ngOnInit() {
     this.loadData();
@@ -52,7 +120,7 @@ export class ProfileComponent implements OnInit {
 
       const map = new Map<number, any>();
 
-      // add reviews
+      
       reviews.forEach((r: any) => {
         map.set(r.movie.id, {
           movie: r.movie,
@@ -61,7 +129,7 @@ export class ProfileComponent implements OnInit {
         });
       });
 
-      // add ratings
+      
       ratings.forEach((rt: any) => {
         if (map.has(rt.movie.id)) {
           map.get(rt.movie.id).rating = rt.value;

@@ -195,11 +195,12 @@ class RecommendationCreateSerializer(serializers.Serializer):
 #output   
 class RecommendationSerializer(serializers.ModelSerializer):
     from_user = UserSerializer(read_only=True)
+    to_user = UserSerializer(read_only=True)
     movie = MovieSerializer(read_only=True)
 
     class Meta:
         model = Recommendation
-        fields = ['id', 'from_user', 'movie', 'message']    
+        fields = ['id', 'from_user', 'to_user', 'movie', 'message']    
     
 class CastMovieCreateSerializer(serializers.Serializer):
     actor_id = serializers.IntegerField()
