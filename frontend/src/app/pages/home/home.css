@@ -13,6 +13,126 @@ body {
   overflow-x: hidden;
 }
 
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(5, 5, 10, 0.86);
+  backdrop-filter: blur(14px);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 5%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.play-icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #ff5f2e, #e63946);
+  box-shadow: 0 10px 28px rgba(255, 95, 46, 0.22);
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-link {
+  color: #a0a0a8;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #ff5f2e;
+}
+
+.input-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 300px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  font-size: 15px;
+}
+
+.search-input::placeholder {
+  color: #85858f;
+}
+
+.search-clear-btn,
+.search-btn {
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.search-clear-btn {
+  color: #a0a0a8;
+  font-size: 20px;
+}
+
+.search-btn {
+  font-size: 18px;
+}
+
+.logout-btn {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #a0a0a8;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  color: #fff;
+  border-color: rgba(255, 95, 46, 0.45);
+}
+
 
 .descript {
   display: grid;
@@ -578,6 +698,22 @@ body {
 }
 
 @media (max-width: 900px) {
+  .header-content {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .nav-menu,
+  .input-logout-btn {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .search-bar {
+    min-width: 0;
+    flex: 1 1 260px;
+  }
+
   .descript,
   .selected-movie-content {
     grid-template-columns: 1fr;
