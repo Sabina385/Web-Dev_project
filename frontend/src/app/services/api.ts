@@ -42,7 +42,7 @@ export class ApiService {
   recommendations = signal<Recommendation[]>([]);
   watchlist = signal<Movie[]>([]);
   currentUserToken = signal<string | null>(localStorage.getItem('token'));
-  searchQuery = signal<string>('');
+  searchQuery = signal('');
 
   getMovies() {
     this.http.get<{ results: Movie[] }>(`${this.baseUrl}movies/`).subscribe({
