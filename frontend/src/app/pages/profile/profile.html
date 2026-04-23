@@ -1,127 +1,167 @@
 <app-navbar></app-navbar>
 
-<div class="profile">
+<main class="profile">
   @if (user()) {
-    <div class="profile-header">
-      <img src="https://png.pngtree.com/png-vector/20190316/ourmid/pngtree-movie-reel-icon-%7C-set-of-great-flat-icons-with-style-png-image_848558.jpg" alt="user icon">
-      <h2>{{ user().username }}</h2>
-    </div>
+    <section class="profile-hero">
+      <div class="profile-identity">
+        <div>
+          <p class="profile-kicker">Movie Club profile</p>
+          <h1>{{ user().username }}</h1>
+          <p class="profile-subtitle">Your watch history, saved films, ratings and recommendations in one place.</p>
+        </div>
+      </div>
+
+      <div class="profile-stats">
+        <div class="stat-card">
+          <span>{{ watchlist().length }}</span>
+          <p>Watchlist</p>
+        </div>
+        <div class="stat-card">
+          <span>{{ reviewCount() }}</span>
+          <p>Reviews</p>
+        </div>
+        <div class="stat-card">
+          <span>{{ ratingCount() }}</span>
+          <p>Ratings</p>
+        </div>
+      </div>
+    </section>
   }
 
-  <div class="tabs">
-    <button (click)="setTab('activity')">Activity</button>
-    <button (click)="setTab('watchlist')">Watchlist</button>
-    <button (click)="setTab('recommendations')">Recommendations</button>
-  </div>
-
-  @if (activeTab() === 'activity') {
-    <div class="controls">
-      <select (change)="activityFilter.set($any($event.target).value)">
-        <option value="all">All</option>
-        <option value="reviews">Reviews</option>
-        <option value="ratings">Ratings</option>
-      </select>
-
-      <select (change)="activitySort.set($any($event.target).value)">
-        <option value="rating">Sort by Rating</option>
-        <option value="title">Sort by Title</option>
-      </select>
+  <section class="profile-panel">
+    <div class="tabs">
+      <button (click)="setTab('activity')" [class.active]="activeTab() === 'activity'">Activity</button>
+      <button (click)="setTab('watchlist')" [class.active]="activeTab() === 'watchlist'">Watchlist</button>
+      <button (click)="setTab('recommendations')" [class.active]="activeTab() === 'recommendations'">
+        Recommendations
+        <span>{{ recommendationCount() }}</span>
+      </button>
     </div>
 
-    @for (item of filteredActivity(); track item.movie.id) {
-      <div class="card">
-        <div class="movie-card">
-          <img [src]="item.movie.images[0]?.image_url" [alt]="item.movie.title">
-          <div>
-            <h3>{{ item.movie.title }}</h3>
-            <p>{{ item.movie.rating_avg }}</p>
-          </div>
-        </div>
+    @if (activeTab() === 'activity') {
+      <div class="profile-list">
+        @for (item of filteredActivity(); track item.movie.id) {
+          <article class="profile-card">
+            <div class="movie-poster">
+              <img [src]="item.movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="item.movie.title">
+            </div>
 
-        @if (item.rating) {
-          <p><strong>Your rate:</strong> {{ item.rating }}/10</p>
-        }
+            <div class="movie-info">
+              <div class="movie-title-row">
+                <h3>{{ item.movie.title }}</h3>
+                <span class="avg-rating">★ {{ item.movie.rating_avg || '0.0' }}</span>
+              </div>
+              <p class="movie-meta">{{ item.movie.release_year }} • {{ item.movie.duration }} min</p>
 
-        @if (item.review) {
-          <p><strong>Your review:</strong> {{ item.review }}</p>
+              <div class="activity-details">
+                @if (item.rating) {
+                  <p><strong>Your rate</strong> {{ item.rating }}/10</p>
+                }
+
+                @if (item.review) {
+                  <p><strong>Your review</strong> {{ item.review }}</p>
+                }
+              </div>
+            </div>
+          </article>
+        } @empty {
+          <p class="empty-state">No activity yet. Rate or review a movie and it will appear here.</p>
         }
       </div>
     }
-  }
 
-  @if (activeTab() === 'watchlist') {
-    <div class="controls">
-      <select (change)="watchlistSort.set($any($event.target).value)">
-        <option value="rating">Sort by Rating</option>
-        <option value="title">Sort by Title</option>
-      </select>
-    </div>
-
-    @for (movie of sortedWatchlist(); track movie.id) {
-      <div class="card">
-        <div class="movie-card">
-          <img [src]="movie.images[0]?.image_url" [alt]="movie.title">
-          <div>
-            <h3>{{ movie.title }}</h3>
-            <p>{{ movie.rating_avg }}</p>
-          </div>
-        </div>
+    @if (activeTab() === 'watchlist') {
+      <div class="profile-list">
+        @for (movie of sortedWatchlist(); track movie.id) {
+          <article class="profile-card">
+            <div class="movie-poster">
+              <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title">
+            </div>
+            <div class="movie-info">
+              <div class="movie-title-row">
+                <h3>{{ movie.title }}</h3>
+                <span class="avg-rating">★ {{ movie.rating_avg || '0.0' }}</span>
+              </div>
+              <p class="movie-meta">{{ movie.release_year }} • {{ movie.duration }} min</p>
+              <p class="saved-note">Saved to watch later</p>
+            </div>
+          </article>
+        } @empty {
+          <p class="empty-state">Your watchlist is empty. Add movies from Home to build your list.</p>
+        }
       </div>
     }
-  }
 
-  <div class="recommendations">
     @if (activeTab() === 'recommendations') {
       <div class="tabs rec-tabs">
-        <button (click)="recommendationTab.set('send')">Send recommendation</button>
-        <button (click)="recommendationTab.set('sent')">Sent</button>
-        <button (click)="recommendationTab.set('received')">Received</button>
+        <button (click)="recommendationTab.set('send')" [class.active]="recommendationTab() === 'send'">Send</button>
+        <button (click)="recommendationTab.set('sent')" [class.active]="recommendationTab() === 'sent'">Sent</button>
+        <button (click)="recommendationTab.set('received')" [class.active]="recommendationTab() === 'received'">Received</button>
       </div>
 
       @if (recommendationTab() === 'send') {
-        <div class="card">
+        <div class="recommendation-form">
           <input [(ngModel)]="recForm.to_username" placeholder="Username send to" required>
           <input [(ngModel)]="recForm.movie_title" placeholder="Movie title">
           <textarea [(ngModel)]="recForm.message" placeholder="Message (optional)"></textarea>
-          <button (click)="sendRec()" class="send-btn">Send</button>
+          <button (click)="sendRec()" class="send-btn" [disabled]="isSendingRecommendation()">
+            {{ isSendingRecommendation() ? 'Sending...' : 'Send Recommendation' }}
+          </button>
+          @if (recommendationMessage()) {
+            <p class="recommendation-message" [class.error]="recommendationMessageType() === 'error'">
+              {{ recommendationMessage() }}
+            </p>
+          }
         </div>
       }
 
       @if (recommendationTab() === 'sent') {
-        @for (rec of sentRecs(); track rec.id) {
-          <div class="card">
-            <div class="movie-card">
-              <img [src]="rec.movie.images[0]?.image_url" [alt]="rec.movie.title">
-              <div>
-                <h3>{{ rec.movie.title }}</h3>
-                <p>{{ rec.movie.rating_avg }}</p>
+        <div class="profile-list">
+          @for (rec of sentRecs(); track rec.id) {
+            <article class="profile-card">
+              <div class="movie-poster">
+                <img [src]="rec.movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="rec.movie.title">
               </div>
-            </div>
-            <p>To: {{ rec.to_user.username }}</p>
-            @if (rec.message) {
-              <p>Message: {{ rec.message }}</p>
-            }
-          </div>
-        }
+              <div class="movie-info">
+                <div class="movie-title-row">
+                  <h3>{{ rec.movie.title }}</h3>
+                  <span class="avg-rating">★ {{ rec.movie.rating_avg || '0.0' }}</span>
+                </div>
+                <p class="movie-meta">To: {{ rec.to_user.username }}</p>
+                @if (rec.message) {
+                  <p class="rec-message">{{ rec.message }}</p>
+                }
+              </div>
+            </article>
+          } @empty {
+            <p class="empty-state">No sent recommendations yet.</p>
+          }
+        </div>
       }
 
       @if (recommendationTab() === 'received') {
-        @for (rec of receivedRecs(); track rec.id) {
-          <div class="card">
-            <div class="movie-card">
-              <img [src]="rec.movie.images[0]?.image_url" [alt]="rec.movie.title">
-              <div>
-                <h3>{{ rec.movie.title }}</h3>
-                <p>{{ rec.movie.rating_avg }}</p>
+        <div class="profile-list">
+          @for (rec of receivedRecs(); track rec.id) {
+            <article class="profile-card">
+              <div class="movie-poster">
+                <img [src]="rec.movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="rec.movie.title">
               </div>
-            </div>
-            <p>From: {{ rec.from_user.username }}</p>
-            @if (rec.message) {
-              <p>Message: {{ rec.message }}</p>
-            }
-          </div>
-        }
+              <div class="movie-info">
+                <div class="movie-title-row">
+                  <h3>{{ rec.movie.title }}</h3>
+                  <span class="avg-rating">★ {{ rec.movie.rating_avg || '0.0' }}</span>
+                </div>
+                <p class="movie-meta">From: {{ rec.from_user.username }}</p>
+                @if (rec.message) {
+                  <p class="rec-message">{{ rec.message }}</p>
+                }
+              </div>
+            </article>
+          } @empty {
+            <p class="empty-state">No received recommendations yet.</p>
+          }
+        </div>
       }
     }
-  </div>
-</div>
+  </section>
+</main>

@@ -10,30 +10,30 @@
 
     <form (ngSubmit)="onRegister()" #regForm="ngForm">
       <div class="input-group">
-        <label>Username</label>
-        <input type="text" name="username" [(ngModel)]="regData.username" required>
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" [(ngModel)]="regData.username" required>
       </div>
 
       <div class="input-group">
-        <label>Email</label>
-        <input type="email" name="email" [(ngModel)]="regData.email" required>
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" [(ngModel)]="regData.email" required>
       </div>
 
-     <div class="input-group">
-       <label>Password</label>
-       <div class="password-wrapper">
-        <input 
-          [type]="isPasswordVisible ? 'text' : 'password'" 
-          name="password" 
-          [(ngModel)]="regData.password" 
-          required
-          placeholder="Create a strong password"
-        >
-        <button type="button" class="eye-btn" (click)="togglePasswordVisibility()">
-          {{ isPasswordVisible ? '👁' : '👁' }}
-        </button>
-  </div>
-</div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input
+            id="password"
+            [type]="isPasswordVisible ? 'text' : 'password'"
+            name="password"
+            [(ngModel)]="regData.password"
+            required
+            placeholder="Create a strong password">
+          <button type="button" class="eye-btn" (click)="togglePasswordVisibility()">
+            {{ isPasswordVisible ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+      </div>
 
       <button type="submit" class="login-btn" [disabled]="!regForm.form.valid">
         Sign Up

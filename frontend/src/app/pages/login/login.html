@@ -11,34 +11,39 @@
     <form (ngSubmit)="onLogin()" #loginForm="ngForm">
       <div class="input-group">
         <label for="username">Username</label>
-        <input 
-          type="text" 
-          id="username" 
-          name="username" 
-          [(ngModel)]="loginData.username" 
-          required 
-          placeholder="Enter your username"
-        >
+        <input
+          type="text"
+          id="username"
+          name="username"
+          [(ngModel)]="loginData.username"
+          (ngModelChange)="clearLoginError()"
+          required
+          placeholder="Enter your username">
       </div>
 
-     <div class="input-group">
-      <label>Password</label>
-      <div class="password-wrapper">
-       <input 
-         [type]="isPasswordVisible ? 'text' : 'password'" 
-         name="password" 
-         [(ngModel)]="loginData.password" 
-         required
-         placeholder="Enter your password"
-    >
-    <button type="button" class="eye-btn" (click)="togglePasswordVisibility()">
-      {{ isPasswordVisible ? '👁' : '👁' }}
-    </button>
-  </div>
-</div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input
+            [type]="isPasswordVisible ? 'text' : 'password'"
+            id="password"
+            name="password"
+            [(ngModel)]="loginData.password"
+            (ngModelChange)="clearLoginError()"
+            required
+            placeholder="Enter your password">
+          <button type="button" class="eye-btn" (click)="togglePasswordVisibility()">
+            {{ isPasswordVisible ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+      </div>
 
-      <button type="submit" class="login-btn" [disabled]="!loginForm.form.valid">
-        Sign In
+      @if (loginError) {
+        <p class="login-error">{{ loginError }}</p>
+      }
+
+      <button type="submit" class="login-btn" [disabled]="!loginForm.form.valid || isLoading">
+        {{ isLoading ? 'Signing in...' : 'Sign In' }}
       </button>
     </form>
 

@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { ApiService } from '../../services/api';
-import { NavbarComponent } from '../../common/navbar/navbar';
 import { Movie } from '../../models/movie.model';
 import { Review, Recommendation, Rating } from '../../models/movie.model';
 
@@ -14,7 +13,7 @@ import { Review, Recommendation, Rating } from '../../models/movie.model';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, NavbarComponent],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })

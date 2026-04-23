@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api';
 import { NavbarComponent } from "../../common/navbar/navbar";
 
@@ -13,6 +14,7 @@ import { NavbarComponent } from "../../common/navbar/navbar";
 })
 export class ProfileComponent implements OnInit {
   public api = inject(ApiService);
+  private route = inject(ActivatedRoute);
 
   user = signal<any>(null);
   activity = signal<any[]>([]);
@@ -21,11 +23,9 @@ export class ProfileComponent implements OnInit {
 
   activeTab = signal<'activity' | 'watchlist' | 'recommendations'>('activity');
   recommendationTab = signal<'send' | 'sent' | 'received'>('send');
-  
-  activityFilter = signal<'all' | 'reviews' | 'ratings'>('all');
-  activitySort = signal<'rating' | 'title'>('rating');
-
-  watchlistSort = signal<'rating' | 'title'>('rating');
+  recommendationMessage = signal('');
+  recommendationMessageType = signal<'success' | 'error'>('success');
+  isSendingRecommendation = signal(false);
 
   recForm = {
     to_username: '',
@@ -35,12 +35,19 @@ export class ProfileComponent implements OnInit {
   
   sentRecs = signal<any[]>([]);
   receivedRecs = signal<any[]>([]);
+
+  reviewCount = computed(() => this.activity().filter(item => item.review).length);
+  ratingCount = computed(() => this.activity().filter(item => item.rating).length);
+  recommendationCount = computed(() => this.sentRecs().length + this.receivedRecs().length);
   
   movieList() {
     return this.api.movies();
   }
 
   sendRec() {
+    this.recommendationMessage.set('');
+    this.isSendingRecommendation.set(true);
+
     const payload: any = {
       to_username: this.recForm.to_username,
       movie_title: this.recForm.movie_title,
@@ -52,62 +59,35 @@ export class ProfileComponent implements OnInit {
 
     this.api.sendRecommendation(payload).subscribe({
       next: () => {
-        alert('Sent!');
         this.recForm = { to_username: '', movie_title: '', message: '' };
+        this.recommendationMessageType.set('success');
+        this.recommendationMessage.set('Recommendation sent successfully.');
+        this.isSendingRecommendation.set(false);
         this.loadData();
       },
       error: (err) => {
         console.error(err);
-        alert('Failed to send');
+        this.recommendationMessageType.set('error');
+        this.recommendationMessage.set('Could not send recommendation. Check username and movie title.');
+        this.isSendingRecommendation.set(false);
       }
     });
   }
 
   filteredActivity = computed(() => {
-    let data = this.activity();
-
-    // filter
-    const filter = this.activityFilter();
-    if (filter === 'reviews') {
-      data = data.filter(i => i.review);
-    } else if (filter === 'ratings') {
-      data = data.filter(i => i.rating);
-    }
-
-    // sort
-    const sort = this.activitySort();
-    if (sort === 'rating') {
-      data = [...data].sort((a, b) =>
-        (b.movie.rating_avg || 0) - (a.movie.rating_avg || 0)
-      );
-    } else if (sort === 'title') {
-      data = [...data].sort((a, b) =>
-        a.movie.title.localeCompare(b.movie.title)
-      );
-    }
-
-    return data;
+    return this.activity();
   });
 
   sortedWatchlist = computed(() => {
-    let data = this.watchlist();
-
-    const sort = this.watchlistSort();
-
-    if (sort === 'rating') {
-      data = [...data].sort((a, b) =>
-        (b.rating_avg || 0) - (a.rating_avg || 0)
-      );
-    } else if (sort === 'title') {
-      data = [...data].sort((a, b) =>
-        a.title.localeCompare(b.title)
-      );
-    }
-
-    return data;
+    return this.watchlist();
   });
 
   ngOnInit() {
+    const tab = this.route.snapshot.queryParamMap.get('tab');
+    if (tab === 'recommendations') {
+      this.activeTab.set('recommendations');
+    }
+
     this.loadData();
   }
 

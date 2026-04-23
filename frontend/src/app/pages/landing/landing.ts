@@ -12,6 +12,23 @@ export class LandingComponent {
   @ViewChild('genresSection') genresSection?: ElementRef<HTMLElement>;
   @ViewChild('aboutSection') aboutSection?: ElementRef<HTMLElement>;
 
+  genres = [
+    'Action',
+    'Adventure',
+    'Biography',
+    'Comedy',
+    'Crime',
+    'Drama',
+    'Fantasy',
+    'Historical',
+    'Music',
+    'Mystery',
+    'Romance',
+    'Sci-Fi',
+    'Thriller',
+    'War'
+  ];
+
   scrollToGenres(event: Event) {
     event.preventDefault();
     this.genresSection?.nativeElement.scrollIntoView({

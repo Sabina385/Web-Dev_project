@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<main class="catalog-page">
+  <section class="catalog-hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Movie Club Catalog</p>
+      <h1>All Movies</h1>
+    </div>
+  </section>
+
+  <section class="catalog-section">
+    <div class="row-header">
+      <div>
+        
+      </div>
+      <span class="movie-count">{{ movies().length }} movies</span>
+    </div>
+
+    <div class="catalog-grid">
+      @for (movie of movies(); track movie.id) {
+        <article class="catalog-card">
+          <div class="catalog-img-box">
+            <img
+              [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'"
+              [alt]="movie.title"
+              (error)="onImageError($event)">
+            <div class="rating-tag">★ {{ movie.rating_avg || '0.0' }}</div>
+          </div>
+
+          <div class="info-box">
+            <h3>{{ movie.title }}</h3>
+            <p>{{ movie.release_year }} • {{ movie.duration }} min</p>
+          </div>
+        </article>
+      } @empty {
+        <div class="catalog-empty">
+          <p>No movies yet.</p>
+          <a routerLink="/home">Back to home</a>
+        </div>
+      }
+    </div>
+  </section>
+</main>

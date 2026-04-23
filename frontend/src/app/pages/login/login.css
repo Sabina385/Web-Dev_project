@@ -93,6 +93,17 @@ input:focus {
   transition: 0.3s;
 }
 
+.login-error {
+  margin: -4px 0 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(230, 57, 70, 0.35);
+  background: rgba(230, 57, 70, 0.10);
+  color: #ffb4a8;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 .login-btn:hover:not(:disabled) {
   background: #e64a19;
   transform: translateY(-2px);
@@ -101,7 +112,7 @@ input:focus {
 
 .login-btn:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
+  cursor: default;
 }
 
 .login-footer {
@@ -130,21 +141,23 @@ input:focus {
 
 .eye-btn {
   position: absolute;
-  right: 12px;
+  right: 10px;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 12px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #808088;
-  padding: 5px;
+  padding: 7px 8px;
+  border-radius: 8px;
   z-index: 10;
   transition: 0.2s;
 }
 
 .eye-btn:hover {
   color: #ff5f2e;
-  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.06);
 }

@@ -114,26 +114,28 @@ input:focus {
 }
 
 .password-wrapper input {
-  padding-right: 45px;
+  padding-right: 64px;
 }
 
 .eye-btn {
   position: absolute;
-  right: 12px;
+  right: 10px;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 12px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #808088;
-  padding: 5px;
+  padding: 7px 8px;
+  border-radius: 8px;
   z-index: 10;
   transition: 0.2s;
 }
 
 .eye-btn:hover {
   color: #ff5f2e;
-  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.06);
 }

@@ -15,19 +15,35 @@ export class LoginComponent {
   private router = inject(Router);
 
   loginData = { username: '', password: '' };
+  loginError = '';
+  isLoading = false;
 
   isPasswordVisible: boolean = false;
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;
   }
 
+  clearLoginError() {
+    this.loginError = '';
+  }
+
   onLogin() {
+    if (this.isLoading) {
+      return;
+    }
+
+    this.loginError = '';
+    this.isLoading = true;
+
     this.api.login(this.loginData).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
         this.router.navigate(['/home']);
       },
-      error: () => alert('Login error!')
+      error: () => {
+        this.isLoading = false;
+        this.loginError = 'Invalid username or password. Please try again.';
+      }
     });
   }
 }

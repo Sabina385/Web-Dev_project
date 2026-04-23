@@ -18,6 +18,7 @@ export interface Movie {
   rating_avg?: number; 
   images: { image_url: string }[];
   genres: { genre: { name: string } }[];
+  cast?: CastMovie[];
 }
 
 export interface MovieGenre {
@@ -41,8 +42,8 @@ export interface Actor {
 
 export interface CastMovie {
   id: number;
-  movie: number;
-  actor: number;
+  movie?: number;
+  actor: Actor;
   role_name: string;
 }
 

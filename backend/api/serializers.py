@@ -71,7 +71,7 @@ class MovieSerializer(serializers.ModelSerializer):
     images = MovieImageSerializer(source='movieimage_set', many=True, read_only=True)
     genres = MovieGenreSerializer(source='moviegenre_set', many=True, read_only=True)
     rating_avg = serializers.SerializerMethodField()
-    #cast = CastMovieSerializer(source='castmovie_set', many=True, read_only=True)
+    cast = CastMovieSerializer(source='castmovie_set', many=True, read_only=True)
 
     class Meta:
         model = Movie
@@ -83,8 +83,8 @@ class MovieSerializer(serializers.ModelSerializer):
             'duration',
             'images',
             'genres',
-            'rating_avg'
-            #'cast'
+            'rating_avg',
+            'cast'
         ]
     def get_rating_avg(self, obj):
         from .models import Rating

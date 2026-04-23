@@ -52,31 +52,34 @@
 
     <div class="right-col">
       <div class="neon-card purple">
-        <div class="card-rating">8.5</div>
-        <span class="card-title">Dune</span>
+        <img src="dune.jpg" alt="Dune poster">
+        <div class="card-rating">8.0</div>
+      
       </div>
       <div class="neon-card orange">
-        <div class="card-rating">8.9</div>
-        <span class="card-title">Oppenheimer</span>
+        <img src="openheimer.jpg" alt="Oppenheimer poster">
+        <div class="card-rating">8.2</div>
+    
       </div>
       <div class="neon-card yellow">
-        <div class="card-rating">7.8</div>
+        <img src="gla.jpg" alt="Gladiator poster">
+        <div class="card-rating">8.5</div>
         
-        <span class="card-title">Gladiator II</span>
       </div>
       <div class="neon-card pink">
+        <img src="inside_out.jpg" alt="Inside Out poster">
         <div class="card-rating">8.1</div>
-        
-        <span class="card-title">Inside Out 2</span>
+      
       </div>
       <div class="neon-card red">
-        <div class="card-rating">7.9</div>
+        <img src="furiosa.jpg" alt="Furiosa poster">
+        <div class="card-rating">7.5</div>
       
-        <span class="card-title">Furiosa</span>
       </div>
       <div class="neon-card green">
+        <img src="alien.jpg" alt="Alien Romulus poster">
         <div class="card-rating">7.4</div>
-        <span class="card-title">Alien: Romulus</span>
+  
       </div>
     </div>
   </main>
@@ -89,13 +92,9 @@
       </div>
 
       <div class="landing-genres-grid">
-        <span class="landing-genre-chip">Action</span>
-        <span class="landing-genre-chip">Adventure</span>
-        <span class="landing-genre-chip">Crime</span>
-        <span class="landing-genre-chip">Drama</span>
-        <span class="landing-genre-chip">Fantasy</span>
-        <span class="landing-genre-chip">Romance</span>
-        <span class="landing-genre-chip">Sci-Fi</span>
+        @for (genre of genres; track genre) {
+          <span class="landing-genre-chip">{{ genre }}</span>
+        }
       </div>
     </div>
   </section>

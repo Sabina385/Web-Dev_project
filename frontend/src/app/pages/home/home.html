@@ -6,8 +6,8 @@
     </div>
     <nav class="nav-menu">
       <a routerLink="/home" class="nav-link active">Home</a>
-      <a routerLink="/home" class="nav-link">Catalog</a>
-      <a routerLink="/home" class="nav-link">Recommendations</a>
+      <a routerLink="/catalog" class="nav-link">Catalog</a>
+      <a routerLink="/profile" [queryParams]="{ tab: 'recommendations' }" class="nav-link">Recommendations</a>
       <a routerLink="/profile" class="nav-link">Profile</a>
     </nav>
     <div class="input-logout-btn">
@@ -27,7 +27,6 @@
     </div>
   </div>
 </header>
-<app-navbar></app-navbar>
 
 
 @if (searchQuery()) {
@@ -71,7 +70,7 @@
   
   </div>
   <div class="descript-image">
-   
+    <img src="movie_club.png" alt="Movie Club cinema hall">
   </div>
 </section>
 
@@ -154,6 +153,20 @@
 
       <div class="selected-movie-poster">
         <img [src]="movie.images[0]?.image_url || 'assets/placeholder.jpg'" [alt]="movie.title" (error)="onImageError($event)">
+
+        @if (movie.cast?.length) {
+          <div class="movie-cast">
+            <h3 class="movie-cast-title">Cast</h3>
+            <div class="cast-list">
+              @for (cast of movie.cast; track cast.id) {
+                <div class="cast-card">
+                  <span class="cast-actor">{{ cast.actor.name }}</span>
+                  <span class="cast-role">{{ cast.role_name }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
       </div>
     </div>
   </section>
@@ -165,7 +178,7 @@
 
     <h2 class="row-title">Popular Movies</h2>
 
-    <button class="see-all-btn" (click)="scrollPopularMovies()">View All →</button>
+    <button class="see-all-btn" (click)="scrollPopularMovies()">View →</button>
 
   </div>
 
@@ -285,12 +298,10 @@
     <div class="footer-section">
       <h4>Company</h4>
       <a href="#" class="footer-link">About Us</a>
-      <a href="#" class="footer-link">GitHub</a>
     </div>
     <div class="footer-section">
       <h4>Support</h4>
       <p>movieclub@gmail.com</p>
-      <p>Terms & Privacy</p>
     </div>
   </div>
   <div class="footer-bottom">
